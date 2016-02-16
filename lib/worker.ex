@@ -25,7 +25,7 @@ defmodule Upup.Worker do
 		end
 	end
 	def terminate(reason, state) do
-		Upup.warm("terminate worker #{inspect state}, reason #{inspect reason}")
+		Upup.warn("terminate worker #{inspect state}, reason #{inspect reason}")
 		:ok
 	end
 
