@@ -21,8 +21,11 @@ defmodule Upup.Mixfile do
 						:myswt,
 						:logex,
 						:sqlx,
-						:wwwest_lite,
-						:exrm
+						:exrm,
+						:tinca,
+						:exutils,
+						:jazz,
+						:httpoison
 					],
      mod: {Upup, []}]
   end
@@ -43,8 +46,11 @@ defmodule Upup.Mixfile do
 		{:myswt, github: "timCF/myswt", branch: "megaweb"},
 		{:logex, github: "timCF/logex"},
 		{:sqlx, github: "timCF/sqlx"},
-		{:wwwest_lite, github: "timCF/wwwest_lite"},
-		{:exrm, github: "bitwalker/exrm", tag: "0.19.9", override: true}
+		{:exrm, github: "bitwalker/exrm", tag: "0.19.9", override: true},
+		{:tinca, github: "timCF/tinca"},
+		{:exutils, github: "timCF/exutils"},
+		{:jazz, github: "meh/jazz"},
+		{:httpoison, github: "edgurgel/httpoison"}
 	]
   end
 end

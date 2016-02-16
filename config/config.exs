@@ -26,13 +26,6 @@ config :myswt,
    server_port: 8041,
    callback_module: Upup.Myswt
 
-config :wwwest_lite,
-   server_port: 8042,
-   server_timeout: 120000, # timeout for all requests
-   memo_ttl: 60000, # timeout for memorize json encode and decode
-   callback_module: Upup.WwwestLite, # here are handlers for requests
-   post_data_type: :json # | :xml | :any # it's data type of post q for decoding
-
 config :sqlx,
 	timeout: 5000,
 	pools:	[

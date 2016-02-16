@@ -8,9 +8,15 @@ defmodule Upup do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+	# tmp dir for pics from web
+	tmpdir = Exutils.priv_dir(:upup)<>"/tmp"
+	_ = File.rm_rf(tmpdir)
+	_ = File.mkdir(tmpdir)
+
     children = [
       # Define workers and child supervisors to be supervised
       # worker(Upup.Worker, [arg1, arg2, arg3]),
+	  worker(Upup.Starter, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
