@@ -3,7 +3,7 @@
 #
 constants =
 	default_opts: () -> {
-		blocks: [{val: "main_page", lab: "данные"},{val: "opts", lab: "опции"},{val: "donate", lab: "пожертвовать"}]
+		blocks: [{val: "main_page", lab: "данные"},{val: "opts", lab: "опции"}]
 		sidebar: false
 		showing_block: "main_page"
 		version: '__VERSION__'

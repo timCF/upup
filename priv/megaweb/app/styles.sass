@@ -1,9 +1,10 @@
-html
-	overflow: hidden
 body
 	padding-top: 70px
 input
 	height: 34px
+iframe
+	height: 80%
+	width: 100%
 .center
 	text-align: center
 	vertical-align: middle
@@ -54,3 +55,23 @@ input
 	left: 0
 	list-style: none
 	margin: 0
+
+=keyframes($name)
+	@-webkit-keyframes #{$name}
+		@content
+	@-moz-keyframes #{$name}
+		@content
+	@-ms-keyframes #{$name}
+		@content
+	@keyframes #{$name}
+		@content
++keyframes(blink)
+	from
+		box-shadow: 0 0 0px cyan
+	to
+		box-shadow: 0 0 50px cyan
+.glowing
+	-webkit-animation: blink 0.8s linear infinite alternate
+	-moz-animation: blink 0.8s linear infinite alternate
+	-o-animation: blink 0.8s linear infinite alternate
+	animation: blink 0.8s linear infinite alternate

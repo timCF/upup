@@ -25,9 +25,6 @@ mixin make_main_block(blo, visibility)
 		else if blo.val == "opts"
 			div.row
 				div.col-md-12
-		else if blo.val == "donate"
-			div.row.center
-				iframe(frameborder="0" allowtransparency="true" scrolling="no" src="https://money.yandex.ru/embed/shop.xml?account=410013974497040&quickpay=shop&payment-type-choice=on&mobile-payment-type-choice=on&writer=buyer&targets-hint=&default-sum=100&button-text=04&successURL=" width="450" height="194")
 //
 //	page content
 //
@@ -44,6 +41,9 @@ div.row
 		div.padded_left(class="btn-group" role="group")
 			div= "версия : "+locals.opts.version
 			div= "доступна : "+locals.handlers.get_last_version()
+		div.padded_left(class="btn-group" role="group")
+			a(href="http://yasobe.ru/na/opensource#form_submit", target="_blank")
+				button.btn.btn-info.navbar-btn.glowing(type="button")= "пожертвовать"
 if locals.opts.sidebar
 	+sidebar("visible")
 else
