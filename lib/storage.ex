@@ -58,17 +58,15 @@ defmodule Upup.Storage do
 	end
 	def get_albums_map([]), do: %{}
 	def get_albums_map(tasks = [_|_]) do
-		"SELECT gid, aid, task_id, album_name, upload_result FROM albums WHERE task_id IN (?);"
+		"SELECT id, gid, aid, task_id, album_name, upload_result FROM albums WHERE task_id IN (?);"
 		|> Sqlx.exec([Stream.map(tasks,fn(%Upup.Task{id: id}) -> id end) |> Enum.uniq], @pool)
-		|> Stream.map(fn(%{gid: gid, aid: aid, task_id: task_id, album_name: album_name, upload_result: upload_result}) -> %Upup.Album{gid: gid, aid: aid, task_id: task_id, album_name: album_name, upload_result: upload_result} end)
-		|> Enum.group_by(fn(%Upup.Album{task_id: tid}) -> tid end)
+		|> Enum.group_by(fn(%{task_id: tid}) -> tid end)
 	end
 	def get_items_map([]), do: %{}
 	def get_items_map(tasks = [_|_]) do
-		"SELECT link, task_id, caption FROM items WHERE task_id IN (?);"
+		"SELECT id, link, task_id, caption FROM items WHERE task_id IN (?);"
 		|> Sqlx.exec([Stream.map(tasks,fn(%Upup.Task{id: id}) -> id end) |> Enum.uniq], @pool)
-		|> Stream.map(fn(%{link: link, task_id: task_id, caption: caption}) -> %Upup.Item{link: link, task_id: task_id, caption: caption} end)
-		|> Enum.group_by(fn(%Upup.Item{task_id: tid}) -> tid end)
+		|> Enum.group_by(fn(%{task_id: tid}) -> tid end)
 	end
 
 
@@ -86,6 +84,13 @@ defmodule Upup.Storage do
 
 	def update_album(%Upup.Album{gid: gid, aid: aid, task_id: tid}, bin) do
 		%{error: []} = "UPDATE albums SET upload_result = ? WHERE gid = ? AND aid = ? AND task_id = ?;" |> Sqlx.exec([bin, gid, aid, tid], @pool)
+	end
+
+
+	def new_album(data = %{task_id: id}, uid) do
+		[%{uid: ^uid}] = "SELECT uid FROM tasks WHERE id = ?;" |> Sqlx.exec([id], @pool)
+		%{error: []} = [Map.put(data, :upload_result, "ok")] |> Sqlx.insert_ignore([:gid, :aid, :task_id, :album_name, :upload_result], "albums", @pool)
+		:ok
 	end
 
 

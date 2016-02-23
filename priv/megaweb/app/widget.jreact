@@ -72,9 +72,9 @@ mixin album(el)
 			if (style != "row_normal")
 				p= el.upload_result
 		div.col-md-2
-			button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_album(key)) сохранить
+			button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_album(locals.data.editable.albums[key], el.id)) сохранить
 		div.col-md-2
-			button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_album(key)) удалить
+			button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_album(el.id)) удалить
 mixin new_item(task_id)
 	div.row
 		div.col-md-3
@@ -101,9 +101,9 @@ mixin item(el)
 		div.col-md-3
 			div.row
 				div.col-md-6
-					button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_item(key)) сохранить
+					button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_item(locals.data.editable.items[key], el.id)) сохранить
 				div.col-md-6
-					button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_item(key)) удалить
+					button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_item(el.id)) удалить
 //
 //	page content
 //

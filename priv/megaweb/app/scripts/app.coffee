@@ -53,36 +53,35 @@ init_state =
 			actor.cast((state) ->
 				to_server("delete_task", {token: state.opts.token, country: state.opts.country, id: id})
 				state)
-		save_album: (key) ->
-			#
-			#	TODO
-			#
-			notice(key)
-		delete_album: (key) ->
-			#
-			#	TODO
-			#
-			error(key)
 		new_album: (album, task_id) ->
+			actor.cast((state) ->
+				to_server("new_album", {token: state.opts.token, country: state.opts.country, task_id: task_id, album: album})
+				state)
+		save_album: (data, id) ->
 			#
 			#	TODO
 			#
-			notice("created")
-		save_item: (key) ->
+			notice(id)
+		delete_album: (id) ->
 			#
 			#	TODO
 			#
-			notice(key)
-		delete_item: (key) ->
-			#
-			#	TODO
-			#
-			error(key)
+			error(id)
 		new_item: (item, task_id) ->
 			#
 			#	TODO
 			#
-			notice("created")
+			notice(task_id)
+		save_item: (data, id) ->
+			#
+			#	TODO
+			#
+			notice(id)
+		delete_item: (id) ->
+			#
+			#	TODO
+			#
+			error(id)
 		#
 		#	some main-purpose handlers
 		#

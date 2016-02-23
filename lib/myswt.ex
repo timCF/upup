@@ -4,6 +4,9 @@ defmodule Upup.Myswt do
 	]
 	require Myswt
 	Myswt.callback_module do
+		#
+		# COMMON
+		#
 		def handle_myswt(%Myswt.Proto{subject: "get_account_data", content: %{token: token, country: country}}) when is_binary(token) and is_binary(country) do
 			case get_connection_details(token, country) do
 				error = %Myswt.Proto{} -> error
@@ -21,6 +24,9 @@ defmodule Upup.Myswt do
 			end
 			|> Myswt.encode
 		end
+		#
+		#	TASKS
+		#
 		def handle_myswt(%Myswt.Proto{subject: "new_task", content: %{token: token, country: country, data: data = %{task_name: _, ttl: _}}}) do
 			case Map.update!(data, :task_name, &Maybe.maybe_to_string/1) |> Map.update!(:ttl, &Maybe.to_integer/1) do
 				%{task_name: task_name, ttl: ttl} when (is_binary(task_name) and is_integer(ttl) and (ttl > 0)) ->
@@ -57,6 +63,24 @@ defmodule Upup.Myswt do
 				%{uid: uid} ->
 					:ok = Upup.Storage.delete_task(%{uid: uid, id: id})
 					%Myswt.Proto{subject: "notice", content: "задача удалена"}
+			end
+			|> Myswt.encode
+		end
+		#
+		#	ALBUMS
+		#
+		def handle_myswt(%Myswt.Proto{subject: "new_album", content: %{token: token, country: country, task_id: task_id, album: data = %{}}}) do
+			case	Map.put(data, :task_id, task_id)
+					|> check_data([{:album_name, &Maybe.maybe_to_string/1, &is_binary/1},{:task_id, &Maybe.to_integer/1, &(is_integer(&1) and (&1 > 0))},{:gid, &Maybe.to_integer/1, &(is_integer(&1) and (&1 > 0))},{:aid, &Maybe.to_integer/1, &(is_integer(&1) and (&1 > 0))}]) do
+				data = %{gid: _, aid: _, task_id: _, album_name: _} ->
+					case get_connection_details(token, country) do
+						error = %Myswt.Proto{} -> error
+						%{uid: uid} ->
+							:ok = Upup.Storage.new_album(data, uid)
+							%Myswt.Proto{subject: "notice", content: "альбом добавлен"}
+					end
+				some ->
+					%Myswt.Proto{content: "неверный запрос #{inspect some}"}
 			end
 			|> Myswt.encode
 		end

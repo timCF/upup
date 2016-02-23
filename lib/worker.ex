@@ -52,14 +52,17 @@ defmodule Upup.Worker do
 							Upup.error(message)
 							Upup.Storage.update_album(album, message)
 					end
-			{:error, error} -> Upup.error("ERROR ON CLENUP USER PHOTOS #{error}, acc #{inspect account}")
+			{:error, error} ->
+				message = "ERROR ON CLENUP USER PHOTOS #{error}, acc #{inspect account}"
+				Upup.error(message)
+				Upup.Storage.update_album(album, message)
 		end
 	end
 
 	defp cleanup_user_photos(album = %Upup.Album{gid: gid, aid: aid}, %Upup.Account{token: token, uid: uid}, proxy) do
 		fn() ->
 			case Exvk.Photos.get(%{gid: gid, aid: aid}, token, proxy) do
-				{:error, error} -> {:error, "error on getting photos 4 album #{inspect album} => #{inspect error}"}
+				{:error, error} -> {:error, "error on getting photos #{inspect error}"}
 				lst when is_list(lst) ->
 					case Stream.filter_map(lst,
 							fn(%{user_id: user_id}) -> user_id == uid end,
