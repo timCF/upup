@@ -11,10 +11,10 @@ defmodule Upup.Worker do
 		{:ok, Upup.Storage.get_account_details(uid), 1}
 	end
 	def handle_info(:timeout, account = %Upup.Account{country: country, uid: uid}) do
-		case Tinca.memo(&getproxy/1, [country], :timer.minutes(5)) |> Enum.shuffle do
-			[] ->
+		case Upup.getproxy(country) do
+			nil ->
 				{:noreply, account, @ttl}
-			[proxy|_] ->
+			proxy ->
 				case Upup.Storage.get_tasks(uid) do
 					[] ->
 						{:stop, :normal, nil}
@@ -29,20 +29,6 @@ defmodule Upup.Worker do
 		:ok
 	end
 
-	defp getproxy(country) do
-		case System.cmd("phantomjs", ["#{Exutils.priv_dir(:upup)}/getproxy.js",country]) do
-			{text, 0} when is_binary(text) ->
-				case Jazz.decode(text) do
-					{:ok, lst = [_|_]} -> lst
-					some ->
-						Upup.error("error on decoding proxy-list for country #{country}, got #{inspect some}, #{text}")
-						[]
-				end
-			some ->
-				Upup.error("error on getting proxy-list for country #{country}, got #{inspect some}")
-				[]
-		end
-	end
 
 	defp process_task(task = %Upup.Task{}, account = %Upup.Account{}, proxy) do
 		# here use stamp

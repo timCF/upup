@@ -20,18 +20,110 @@ mixin sidebar(visibility)
 mixin make_main_block(blo, visibility)
 	div.container-fluid.padded(class=visibility)
 		if blo.val == "main_page"
+			if locals.data.userdata
+				div.row
+					div.col-md-4
+						input.form-control.fill(type="text" placeholder="имя задачи" onChange=locals.handlers.change_from_view(["data","new","task","task_name"]))
+					div.col-md-4
+						input.form-control.fill(type="number" placeholder="интервал обновления в сек" onChange=locals.handlers.change_from_view(["data","new","task","ttl"]))
+					div.col-md-4
+						button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_task()) добавить задачу
+				each task in locals.data.userdata.tasks
+					hr
+					div.row.padded_top.pastel3
+						div.col-md-4
+							input.form-control.fill(type="text" placeholder=task.task_name onChange=locals.handlers.edit_create("task_name", ["data","editable","tasks", task.id]))
+						div.col-md-4
+							input.form-control.fill(type="number" placeholder=task.ttl+" (секунд)" onChange=locals.handlers.edit_create("ttl", ["data","editable","tasks", task.id]))
+						div.col-md-2
+							button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_task(task.id)) сохранить
+						div.col-md-2
+							button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_task(task.id)) удалить
+					div.row.pastel3
+						- var albums = locals.data.userdata.albums[task.id]
+						- var items = locals.data.userdata.items[task.id]
+						div.col-md-6.padded_top.pastel1
+							+new_album(task.id)
+							if albums
+								each this_album in albums
+									+album(this_album)
+						div.col-md-6.padded_top.pastel2
+							+new_item(task.id)
+							if items
+								each this_item in items
+									+item(this_item, task.id)
+		else if blo.val == "about"
 			div.row
 				div.col-md-12
-		else if blo.val == "opts"
-			div.row
-				div.col-md-12
+mixin new_album(task_id)
+	div.container-fluid.padded
+		div.row
+			div.col-md-3
+				input.form-control.fill(type="number" placeholder="id группы" onChange=locals.handlers.change_from_view(["data","new","album","gid"]))
+			div.col-md-3
+				input.form-control.fill(type="number" placeholder="id альбома" onChange=locals.handlers.change_from_view(["data","new","album","aid"]))
+			div.col-md-3
+				input.form-control.fill(type="text" placeholder="название альбома" onChange=locals.handlers.change_from_view(["data","new","album","album_name"]))
+			div.col-md-3
+				button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_album(locals.data.new.album, task_id)) добавить альбом
+mixin album(el)
+	- var key = el.task_id+"_"+el.gid+"_"+el.aid
+	- var style = (el.upload_result == "ok") ? "row_normal" : "row_error"
+	div.container-fluid.padded(class=style)
+		div.row
+			// gid, aid, task_id, album_name, upload_result
+			div.col-md-2
+				input.form-control.fill(type="number" placeholder=el.gid onChange=locals.handlers.edit_create("gid", ["data","editable","albums", key]))
+			div.col-md-2
+				input.form-control.fill(type="number" placeholder=el.aid onChange=locals.handlers.edit_create("aid", ["data","editable","albums", key]))
+			div.col-md-2
+				input.form-control.fill(type="text" placeholder=el.album_name onChange=locals.handlers.edit_create("album_name", ["data","editable","albums", key]))
+			div.col-md-2.center
+				if (style != "row_normal")
+					p= el.upload_result
+			div.col-md-2
+				button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_album(key)) сохранить
+			div.col-md-2
+				button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_album(key)) удалить
+mixin new_item(task_id)
+	div.container-fluid.padded
+		div.row
+			div.col-md-3
+				input.form-control.fill(type="text" placeholder="ссылка на фото" onChange=locals.handlers.change_from_view(["data","new","item","link"]))
+			div.col-md-3
+				input.form-control.fill(type="text" placeholder="текст описания" onChange=locals.handlers.change_from_view(["data","new","item","caption"]))
+			div.col-md-3
+				- var link = locals.data.new.item.link
+				if link
+					img.fill(src=link)
+			div.col-md-3
+				button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_item(locals.data.new.item, task_id)) добавить фото
+mixin item(el)
+	- var key = el.task_id+"_"+el.link
+	div.container-fluid.padded
+		div.row
+			// link, task_id, caption
+			div.col-md-3
+				input.form-control.fill(type="text" placeholder=el.link onChange=locals.handlers.edit_create("link", ["data","editable","items", key]))
+			div.col-md-3
+				input.form-control.fill(type="text" placeholder=el.caption onChange=locals.handlers.edit_create("caption", ["data","editable","items", key]))
+			div.col-md-3
+				if el.link
+					img.fill(src=el.link)
+			div.col-md-3
+				div.row
+					div.col-md-6
+						button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_item(key)) сохранить
+					div.col-md-6
+						button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_item(key)) удалить
 //
 //	page content
 //
+
 div.row
 	nav.navbar.navbar-default.navbar-fixed-top.transparent
-		div.padded_left(class="btn-group" role="group")
-			+opts_button_input("инструменты", ["opts","sidebar"])
+		//div.padded_left(class="btn-group" role="group")
+		//	+opts_button_input("инструменты", ["opts","sidebar"])
 		div.padded_left(class="btn-group" role="group")
 			each blo in locals.opts.blocks
 				if locals.opts.showing_block == blo.val
@@ -44,12 +136,35 @@ div.row
 		div.padded_left(class="btn-group" role="group")
 			a(href="http://yasobe.ru/na/opensource#form_submit", target="_blank")
 				button.btn.btn-info.navbar-btn.glowing(type="button")= "пожертвовать"
-if locals.opts.sidebar
-	+sidebar("visible")
-else
-	+sidebar("hidden")
+//if locals.opts.sidebar
+//	+sidebar("visible")
+//else
+//	+sidebar("hidden")
 each blo in locals.opts.blocks
 	if locals.opts.showing_block == blo.val
 		+make_main_block(blo, "visible")
 	else
 		+make_main_block(blo, "hidden")
+if locals.data.is_logined == false
+	div.overlay
+		div.container-fluid.padded.overlay_input
+			div.row.padded_top
+				div.col-md-offset-4.col-md-4.padded_left
+					input.form-control.fill(type="password" autocomplete="on" placeholder=(locals.opts.token ? "•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••" : "ключ") onChange=locals.handlers.change_from_view(["opts","token"]))
+			div.row.padded_top
+				div.col-md-offset-4.col-md-2.padded_left
+					select.form-control.fill(onChange=locals.handlers.change_from_view(["opts","country"]))
+						each el in ["RU","UA"]
+							option= el
+				div.col-md-2.padded_left
+					a.fill(href="https://oauth.vk.com/authorize?client_id=4053347&scope=notify,friends,photos,audio,video,docs,notes,pages,status,offers,questions,wall,groups,messages,notifications,stats,ads,offline&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token", target="_blank")
+						button.btn.btn-success.fill(type="button") получить ключ
+			div.row.padded_top
+				div.col-md-offset-4.col-md-4.padded_left
+					button.btn.btn-primary.fill(type="button" onClick=locals.handlers.log_in()) войти
+if locals.data.is_locked
+	div.overlay
+		div.container-fluid.padded.overlay_input
+			div.row.padded_top.center
+				div.col-md-12.center
+					div.btn.btn-default.navbar-btn.disabled.center= "команда выполняется"

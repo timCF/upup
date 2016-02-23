@@ -3,10 +3,12 @@
 #
 constants =
 	default_opts: () -> {
-		blocks: [{val: "main_page", lab: "данные"},{val: "opts", lab: "опции"}]
+		blocks: [{val: "main_page", lab: "задачи"},{val: "about", lab: "о программе"}]
 		sidebar: false
 		showing_block: "main_page"
 		version: '__VERSION__'
+		token: false
+		country: "RU"
 	}
 	colors: () -> {red: '#CC3300', yellow: '#FFFF00', pink: '#FF6699'}
 #
@@ -14,13 +16,73 @@ constants =
 #
 init_state =
 	data: {
-		foo: true
+		is_logined: false,
+		is_locked: false,
+		userdata: false,
+		editable: {
+			tasks: {},
+			albums: {},
+			items: {}
+		}
+		new: {
+			task: {},
+			album: {},
+			item: {}
+		}
 		cache: {}
 	}
 	handlers: {
 		#
 		#	app local handlers
 		#
+		edit_create: (field, path, ev) ->
+			if (ev? and ev.target? and ev.target.value?)
+				tmp = ev.target.value
+				actor.cast((state) ->
+					if not(Imuta.get_in(state, path)) then (state = Imuta.put_in(state, path, {}))
+					Imuta.put_in(state, path.concat([field]), tmp))
+		new_task: () ->
+			actor.cast((state) ->
+				to_server("new_task", {token: state.opts.token, country: state.opts.country, data: state.data.new.task})
+				state)
+		save_task: (id) ->
+			actor.cast((state) ->
+				to_server("save_task", {token: state.opts.token, country: state.opts.country, data: state.data.editable.tasks[id], id: id})
+				state)
+		delete_task: (id) ->
+			actor.cast((state) ->
+				to_server("delete_task", {token: state.opts.token, country: state.opts.country, id: id})
+				state)
+		save_album: (key) ->
+			#
+			#	TODO
+			#
+			notice(key)
+		delete_album: (key) ->
+			#
+			#	TODO
+			#
+			error(key)
+		new_album: (album, task_id) ->
+			#
+			#	TODO
+			#
+			notice("created")
+		save_item: (key) ->
+			#
+			#	TODO
+			#
+			notice(key)
+		delete_item: (key) ->
+			#
+			#	TODO
+			#
+			error(key)
+		new_item: (item, task_id) ->
+			#
+			#	TODO
+			#
+			notice("created")
 		#
 		#	some main-purpose handlers
 		#
@@ -46,11 +108,9 @@ init_state =
 		reset_opts: () -> actor.cast((state) ->
 			state.opts = constants.default_opts()
 			store.remove("opts")
-			warn("Опции сброшены до значений по умолчанию")
 			state)
 		save_opts: () -> actor.cast((state) ->
 			store.set("opts", state.opts)
-			notice("Опции сохранены")
 			state)
 		# use it only on start of application
 		load_opts: () ->
@@ -63,21 +123,25 @@ init_state =
 				state.opts.showing_block = constants.default_opts().showing_block
 				state.opts.sidebar = constants.default_opts().sidebar
 				state)
+		log_in: () ->
+			actor.cast((state) ->
+				state.handlers.save_opts()
+				to_server("get_account_data", {token: state.opts.token, country: state.opts.country})
+				state)
 	}
 #
 #	actor to not care abount concurrency
 #
 actor = new Act(init_state, "pure", 500)
-#
-#	static clean inner handlers
-#
-
-#	TODO?
 
 #
 #	messages
 #
 to_server = (subject, content) ->
+	if ((subject != "ping") and (subject != "get_account_data"))
+		actor.cast((state) ->
+			state.data.is_locked = true
+			state)
 	bullet.send(JSON.stringify({"subject": subject,"content": content}))
 #
 #	view renderers
@@ -103,7 +167,7 @@ notice = (mess) ->
 #
 #	bullet handlers
 #
-bullet = $.bullet("ws://" + location.hostname + ":__PORT__/bullet")
+bullet = $.bullet("ws://" + location.hostname + ":8041/bullet")
 document.addEventListener "DOMContentLoaded", (e) ->
 	domelement  = document.getElementById("main_frame")
 	actor.get().handlers.load_opts()
@@ -116,9 +180,18 @@ document.addEventListener "DOMContentLoaded", (e) ->
 		mess = $.parseJSON(e.data)
 		subject = mess.subject
 		content = mess.content
+		if ((subject != "ping") and (subject != "get_account_data"))
+			actor.cast((state) ->
+				state.data.is_locked = false
+				state)
 		switch subject
 			when "pong" then "ok"
 			when "error" then error(content)
 			when "warn" then warn(content)
 			when "notice" then notice(content)
+			when "get_account_data"
+				actor.cast((state) ->
+					state.data.userdata = content
+					state.data.is_logined = true
+					state)
 			else alert("subject : "+subject+" | content : "+content)

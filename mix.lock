@@ -11,7 +11,7 @@
   "exrm": {:git, "https://github.com/bitwalker/exrm.git", "ba7596cdc9f303708d7279b223408c19219c2ca3", [tag: "0.19.9"]},
   "extask": {:git, "https://github.com/timCF/extask.git", "691cc1a515750bead8b81ed6c13cddbcf115d754", []},
   "exutils": {:git, "https://github.com/timCF/exutils.git", "82ce0270cf95d36d41660154a7daa4450fd9d614", []},
-  "exvk": {:git, "https://github.com/timCF/exvk.git", "446e7a7ac104be78407cd4241229b8529b52e6b4", []},
+  "exvk": {:git, "https://github.com/timCF/exvk.git", "c6252aa14e66825ded4e5e65714ca0df7ca8a855", []},
   "folsom": {:git, "https://github.com/boundary/folsom.git", "8914823067c623d2839ecd6d17785ba94ad004c8", []},
   "getopt": {:hex, :getopt, "0.8.2"},
   "hackney": {:hex, :hackney, "1.4.8"},
