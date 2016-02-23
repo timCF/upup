@@ -9,16 +9,8 @@ mixin opts_button_input(lab, path)
 		button.btn.btn-success.fill(type="button" onClick=locals.handlers.change_from_view_swap(path))= lab
 	else
 		button.btn.btn-default.fill(type="button" onClick=locals.handlers.change_from_view_swap(path))= lab
-mixin sidebar(visibility)
-	div.navbar.navbar-default.sidebar.transparent.ontop(class=visibility)
-		div.container-fluid.padded
-			div.row
-				div.col-md-12
-					div.btn-group.fill(role="group")
-						button.btn.btn-warning.fill50(type="button" onClick=locals.handlers.save_opts()) сохранить опции
-						button.btn.btn-danger.fill50(type="button" onClick=locals.handlers.reset_opts()) сбросить опции
 mixin make_main_block(blo, visibility)
-	div.container-fluid.padded(class=visibility)
+	div.container-fluid(class=visibility)
 		if blo.val == "main_page"
 			if locals.data.userdata
 				div.row
@@ -39,15 +31,15 @@ mixin make_main_block(blo, visibility)
 							button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_task(task.id)) сохранить
 						div.col-md-2
 							button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_task(task.id)) удалить
-					div.row.pastel3
+					div.row.padded_top.pastel3
 						- var albums = locals.data.userdata.albums[task.id]
 						- var items = locals.data.userdata.items[task.id]
-						div.col-md-6.padded_top.pastel1
+						div.col-md-6.pastel1
 							+new_album(task.id)
 							if albums
 								each this_album in albums
 									+album(this_album)
-						div.col-md-6.padded_top.pastel2
+						div.col-md-6.pastel2
 							+new_item(task.id)
 							if items
 								each this_item in items
@@ -56,90 +48,80 @@ mixin make_main_block(blo, visibility)
 			div.row
 				div.col-md-12
 mixin new_album(task_id)
-	div.container-fluid.padded
-		div.row
-			div.col-md-3
-				input.form-control.fill(type="number" placeholder="id группы" onChange=locals.handlers.change_from_view(["data","new","album","gid"]))
-			div.col-md-3
-				input.form-control.fill(type="number" placeholder="id альбома" onChange=locals.handlers.change_from_view(["data","new","album","aid"]))
-			div.col-md-3
-				input.form-control.fill(type="text" placeholder="название альбома" onChange=locals.handlers.change_from_view(["data","new","album","album_name"]))
-			div.col-md-3
-				button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_album(locals.data.new.album, task_id)) добавить альбом
+	div.row
+		div.col-md-3
+			input.form-control.fill(type="number" placeholder="id группы" onChange=locals.handlers.change_from_view(["data","new","album","gid"]))
+		div.col-md-3
+			input.form-control.fill(type="number" placeholder="id альбома" onChange=locals.handlers.change_from_view(["data","new","album","aid"]))
+		div.col-md-3
+			input.form-control.fill(type="text" placeholder="название альбома" onChange=locals.handlers.change_from_view(["data","new","album","album_name"]))
+		div.col-md-3
+			button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_album(locals.data.new.album, task_id)) добавить альбом
 mixin album(el)
 	- var key = el.task_id+"_"+el.gid+"_"+el.aid
 	- var style = (el.upload_result == "ok") ? "row_normal" : "row_error"
-	div.container-fluid.padded(class=style)
-		div.row
-			// gid, aid, task_id, album_name, upload_result
-			div.col-md-2
-				input.form-control.fill(type="number" placeholder=el.gid onChange=locals.handlers.edit_create("gid", ["data","editable","albums", key]))
-			div.col-md-2
-				input.form-control.fill(type="number" placeholder=el.aid onChange=locals.handlers.edit_create("aid", ["data","editable","albums", key]))
-			div.col-md-2
-				input.form-control.fill(type="text" placeholder=el.album_name onChange=locals.handlers.edit_create("album_name", ["data","editable","albums", key]))
-			div.col-md-2.center
-				if (style != "row_normal")
-					p= el.upload_result
-			div.col-md-2
-				button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_album(key)) сохранить
-			div.col-md-2
-				button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_album(key)) удалить
+	div.row.padded_top(class=style)
+		// gid, aid, task_id, album_name, upload_result
+		div.col-md-2
+			input.form-control.fill(type="number" placeholder=el.gid onChange=locals.handlers.edit_create("gid", ["data","editable","albums", key]))
+		div.col-md-2
+			input.form-control.fill(type="number" placeholder=el.aid onChange=locals.handlers.edit_create("aid", ["data","editable","albums", key]))
+		div.col-md-2
+			input.form-control.fill(type="text" placeholder=el.album_name onChange=locals.handlers.edit_create("album_name", ["data","editable","albums", key]))
+		div.col-md-2.center
+			if (style != "row_normal")
+				p= el.upload_result
+		div.col-md-2
+			button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_album(key)) сохранить
+		div.col-md-2
+			button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_album(key)) удалить
 mixin new_item(task_id)
-	div.container-fluid.padded
-		div.row
-			div.col-md-3
-				input.form-control.fill(type="text" placeholder="ссылка на фото" onChange=locals.handlers.change_from_view(["data","new","item","link"]))
-			div.col-md-3
-				input.form-control.fill(type="text" placeholder="текст описания" onChange=locals.handlers.change_from_view(["data","new","item","caption"]))
-			div.col-md-3
-				- var link = locals.data.new.item.link
-				if link
-					img.fill(src=link)
-			div.col-md-3
-				button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_item(locals.data.new.item, task_id)) добавить фото
+	div.row
+		div.col-md-3
+			input.form-control.fill(type="text" placeholder="ссылка на фото" onChange=locals.handlers.change_from_view(["data","new","item","link"]))
+		div.col-md-3
+			input.form-control.fill(type="text" placeholder="текст описания" onChange=locals.handlers.change_from_view(["data","new","item","caption"]))
+		div.col-md-3
+			- var link = locals.data.new.item.link
+			if link
+				img.fill(src=link)
+		div.col-md-3
+			button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_item(locals.data.new.item, task_id)) добавить фото
 mixin item(el)
 	- var key = el.task_id+"_"+el.link
-	div.container-fluid.padded
-		div.row
-			// link, task_id, caption
-			div.col-md-3
-				input.form-control.fill(type="text" placeholder=el.link onChange=locals.handlers.edit_create("link", ["data","editable","items", key]))
-			div.col-md-3
-				input.form-control.fill(type="text" placeholder=el.caption onChange=locals.handlers.edit_create("caption", ["data","editable","items", key]))
-			div.col-md-3
-				if el.link
-					img.fill(src=el.link)
-			div.col-md-3
-				div.row
-					div.col-md-6
-						button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_item(key)) сохранить
-					div.col-md-6
-						button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_item(key)) удалить
+	div.row.padded_top
+		// link, task_id, caption
+		div.col-md-3
+			input.form-control.fill(type="text" placeholder=el.link onChange=locals.handlers.edit_create("link", ["data","editable","items", key]))
+		div.col-md-3
+			input.form-control.fill(type="text" placeholder=el.caption onChange=locals.handlers.edit_create("caption", ["data","editable","items", key]))
+		div.col-md-3
+			if el.link
+				img.fill(src=el.link)
+		div.col-md-3
+			div.row
+				div.col-md-6
+					button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_item(key)) сохранить
+				div.col-md-6
+					button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_item(key)) удалить
 //
 //	page content
 //
-
-div.row
-	nav.navbar.navbar-default.navbar-fixed-top.transparent
-		//div.padded_left(class="btn-group" role="group")
-		//	+opts_button_input("инструменты", ["opts","sidebar"])
-		div.padded_left(class="btn-group" role="group")
-			each blo in locals.opts.blocks
-				if locals.opts.showing_block == blo.val
-					button.btn.btn-success.navbar-btn(type="button" onClick=locals.handlers.show_block(blo.val))= blo.lab
-				else
-					button.btn.btn-default.navbar-btn(type="button" onClick=locals.handlers.show_block(blo.val))= blo.lab
-		div.padded_left(class="btn-group" role="group")
-			div= "версия : "+locals.opts.version
-			div= "доступна : "+locals.handlers.get_last_version()
-		div.padded_left(class="btn-group" role="group")
-			a(href="http://yasobe.ru/na/opensource#form_submit", target="_blank")
-				button.btn.btn-info.navbar-btn.glowing(type="button")= "пожертвовать"
-//if locals.opts.sidebar
-//	+sidebar("visible")
-//else
-//	+sidebar("hidden")
+div.container-fluid
+	div.row
+		nav.navbar.navbar-default.navbar-fixed-top.transparent
+			div.padded_left(class="btn-group" role="group")
+				each blo in locals.opts.blocks
+					if locals.opts.showing_block == blo.val
+						button.btn.btn-success.navbar-btn(type="button" onClick=locals.handlers.show_block(blo.val))= blo.lab
+					else
+						button.btn.btn-default.navbar-btn(type="button" onClick=locals.handlers.show_block(blo.val))= blo.lab
+			div.padded_left(class="btn-group" role="group")
+				div= "версия : "+locals.opts.version
+				div= "доступна : "+locals.handlers.get_last_version()
+			div.padded_left(class="btn-group" role="group")
+				a(href="http://yasobe.ru/na/opensource#form_submit", target="_blank")
+					button.btn.btn-info.navbar-btn.glowing(type="button")= "пожертвовать"
 each blo in locals.opts.blocks
 	if locals.opts.showing_block == blo.val
 		+make_main_block(blo, "visible")

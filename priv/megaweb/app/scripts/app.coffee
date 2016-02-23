@@ -137,6 +137,11 @@ actor = new Act(init_state, "pure", 500)
 #
 #	messages
 #
+update_state = () ->
+	actor.cast((state) ->
+		if state.data.is_logined then to_server("get_account_data", {token: state.opts.token, country: state.opts.country})
+		state)
+	setTimeout(update_state, 3000)
 to_server = (subject, content) ->
 	if ((subject != "ping") and (subject != "get_account_data"))
 		actor.cast((state) ->
@@ -172,7 +177,9 @@ document.addEventListener "DOMContentLoaded", (e) ->
 	domelement  = document.getElementById("main_frame")
 	actor.get().handlers.load_opts()
 	actor.zcast(() -> render_process())
-	bullet.onopen = () -> notice("bullet websocket: соединение с сервером установлено")
+	bullet.onopen = () ->
+		notice("bullet websocket: соединение с сервером установлено")
+		update_state()
 	bullet.ondisconnect = () -> error("bullet websocket: соединение с сервером потеряно")
 	bullet.onclose = () -> warn("bullet websocket: соединение с сервером закрыто")
 	bullet.onheartbeat = () -> to_server("ping","nil")

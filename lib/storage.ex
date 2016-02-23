@@ -34,6 +34,23 @@ defmodule Upup.Storage do
 		%{error: []} = Sqlx.insert_ignore(tasks, [:uid, :task_name, :ttl], "tasks", @pool)
 		:ok
 	end
+	def save_task(subj = %{uid: uid, id: id}) do
+		[%{uid: ^uid}] = "SELECT uid FROM tasks WHERE id = ?;" |> Sqlx.exec([id], @pool)
+		keys = Map.keys(subj) |> Enum.filter(&(not(&1 in [:uid, :id])))
+		case	Stream.map(keys, &("UPDATE tasks SET #{&1} = ? WHERE id = #{id}"))
+				|> Enum.join(";")
+				|> Sqlx.exec(Enum.map(keys, &(Map.get(subj,&1))), @pool) do
+			%{error: []} -> :ok
+			%{error: error} -> {:error, error}
+		end
+	end
+	def delete_task(%{uid: uid, id: id}) do
+		[%{uid: ^uid}] = "SELECT uid FROM tasks WHERE id = ?;" |> Sqlx.exec([id], @pool)
+		%{error: []} = "DELETE FROM tasks WHERE id = ?;" |> Sqlx.exec([id], @pool)
+		:ok
+	end
+
+
 	def get_tasks(uid) do
 		"SELECT id, uid, task_name, ttl FROM tasks WHERE uid = ?;"
 		|> Sqlx.exec([uid], @pool)
