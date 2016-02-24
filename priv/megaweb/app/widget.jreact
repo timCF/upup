@@ -50,13 +50,13 @@ mixin make_main_block(blo, visibility)
 mixin new_album(task_id)
 	div.row
 		div.col-md-3
-			input.form-control.fill(type="number" placeholder="id группы" onChange=locals.handlers.change_from_view(["data","new","album","gid"]))
+			input.form-control.fill(type="number" placeholder="id группы" onChange=locals.handlers.edit_create("gid", ["data","new","album", task_id]))
 		div.col-md-3
-			input.form-control.fill(type="number" placeholder="id альбома" onChange=locals.handlers.change_from_view(["data","new","album","aid"]))
+			input.form-control.fill(type="number" placeholder="id альбома" onChange=locals.handlers.edit_create("aid", ["data","new","album", task_id]))
 		div.col-md-3
-			input.form-control.fill(type="text" placeholder="название альбома" onChange=locals.handlers.change_from_view(["data","new","album","album_name"]))
+			input.form-control.fill(type="text" placeholder="название альбома" onChange=locals.handlers.edit_create("album_name", ["data","new","album", task_id]))
 		div.col-md-3
-			button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_album(locals.data.new.album, task_id)) добавить альбом
+			button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_album(locals.data.new.album[task_id], task_id)) добавить альбом
 mixin album(el)
 	- var key = el.task_id+"_"+el.gid+"_"+el.aid
 	- var style = (el.upload_result == "ok") ? "row_normal" : "row_error"
@@ -78,15 +78,16 @@ mixin album(el)
 mixin new_item(task_id)
 	div.row
 		div.col-md-3
-			input.form-control.fill(type="text" placeholder="ссылка на фото" onChange=locals.handlers.change_from_view(["data","new","item","link"]))
+			input.form-control.fill(type="text" placeholder="ссылка на фото" onChange=locals.handlers.edit_create("link", ["data","new","item", task_id]))
 		div.col-md-3
-			input.form-control.fill(type="text" placeholder="текст описания" onChange=locals.handlers.change_from_view(["data","new","item","caption"]))
+			input.form-control.fill(type="text" placeholder="текст описания" onChange=locals.handlers.edit_create("caption", ["data","new","item", task_id]))
 		div.col-md-3
-			- var link = locals.data.new.item.link
-			if link
-				img.fill(src=link)
+			if locals.data.new.item[task_id]
+				- var link = locals.data.new.item[task_id].link
+					if link
+						img.fill(src=link)
 		div.col-md-3
-			button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_item(locals.data.new.item, task_id)) добавить фото
+			button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_item(locals.data.new.item[task_id], task_id)) добавить фото
 mixin item(el)
 	- var key = el.task_id+"_"+el.link
 	div.row.padded_top
@@ -121,7 +122,7 @@ div.container-fluid
 				div= "доступна : "+locals.handlers.get_last_version()
 			div.padded_left(class="btn-group" role="group")
 				a(href="http://yasobe.ru/na/opensource#form_submit", target="_blank")
-					button.btn.btn-info.navbar-btn.glowing(type="button")= "пожертвовать"
+					button.btn.btn-info.navbar-btn.glowing(type="button")= "поблагодарить автора"
 each blo in locals.opts.blocks
 	if locals.opts.showing_block == blo.val
 		+make_main_block(blo, "visible")

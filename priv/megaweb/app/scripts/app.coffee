@@ -58,30 +58,37 @@ init_state =
 				to_server("new_album", {token: state.opts.token, country: state.opts.country, task_id: task_id, album: album})
 				state)
 		save_album: (data, id) ->
-			#
-			#	TODO
-			#
-			notice(id)
+			actor.cast((state) ->
+				to_server("save_album", {token: state.opts.token, country: state.opts.country, data: data, id: id})
+				state)
 		delete_album: (id) ->
-			#
-			#	TODO
-			#
-			error(id)
+			actor.cast((state) ->
+				to_server("delete_album", {token: state.opts.token, country: state.opts.country, id: id})
+				state)
 		new_item: (item, task_id) ->
-			#
-			#	TODO
-			#
-			notice(task_id)
+			actor.cast((state) ->
+				if state.handlers.check_link(item)
+					to_server("new_item", {token: state.opts.token, country: state.opts.country, task_id: task_id, data: item})
+				else
+					error("неверный формат ссылки, можно загружать фото только с сайта vk.com")
+				state)
 		save_item: (data, id) ->
-			#
-			#	TODO
-			#
-			notice(id)
+			actor.cast((state) ->
+				if state.handlers.check_link(data)
+					to_server("save_item", {token: state.opts.token, country: state.opts.country, id: id, data: data})
+				else
+					error("неверный формат ссылки, можно загружать фото только с сайта vk.com")
+				state)
 		delete_item: (id) ->
-			#
-			#	TODO
-			#
-			error(id)
+			actor.cast((state) ->
+				to_server("delete_item", {token: state.opts.token, country: state.opts.country, id: id})
+				state)
+		check_link: (item) ->
+			link = item.link
+			if Imuta.is_string(link)
+				link.match(/^http(s)?\:\/\/(cs|pp)\d*\.vk\.me/)
+			else
+				true
 		#
 		#	some main-purpose handlers
 		#

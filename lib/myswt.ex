@@ -1,6 +1,6 @@
 defmodule Upup.Myswt do
 	use Silverb, [
-		{"@imgregexp", ~r/^http\:\/\/cs\d+\.vk\.me/}
+		{"@imgregexp", ~r/^http(s)?\:\/\/(cs|pp)\d*\.vk\.me/}
 	]
 	require Myswt
 	Myswt.callback_module do
@@ -81,6 +81,80 @@ defmodule Upup.Myswt do
 					end
 				some ->
 					%Myswt.Proto{content: "неверный запрос #{inspect some}"}
+			end
+			|> Myswt.encode
+		end
+		def handle_myswt(%Myswt.Proto{subject: "save_album", content: %{token: token, country: country, id: id, data: data = %{}}}) do
+			case check_data(data, [{:album_name, &Maybe.maybe_to_string/1, &is_binary/1},{:gid, &Maybe.to_integer/1, &(is_integer(&1) and (&1 > 0))},{:aid, &Maybe.to_integer/1, &(is_integer(&1) and (&1 > 0))}]) do
+				empty when (empty == %{}) -> %Myswt.Proto{content: "пустой запрос"}
+				data = %{} ->
+					case get_connection_details(token, country) do
+						error = %Myswt.Proto{} -> error
+						%{uid: uid} ->
+							case Upup.Storage.save_album(data, uid, id) do
+								:ok -> %Myswt.Proto{subject: "notice", content: "альбом сохранён"}
+								{:error, error} -> %Myswt.Proto{content: "ошибка при mysql запросе! #{inspect error}"}
+							end
+
+					end
+			end
+			|> Myswt.encode
+		end
+		def handle_myswt(%Myswt.Proto{subject: "delete_album", content: %{token: token, country: country, id: id}}) do
+			case get_connection_details(token, country) do
+				error = %Myswt.Proto{} -> error
+				%{uid: uid} ->
+					:ok = Upup.Storage.delete_album(%{uid: uid, id: id})
+					%Myswt.Proto{subject: "notice", content: "альбом удалён"}
+			end
+			|> Myswt.encode
+		end
+		#
+		#	ITEMS
+		#
+		def handle_myswt(%Myswt.Proto{subject: "new_item", content: %{token: token, country: country, task_id: task_id, data: data = %{}}}) do
+			case	Map.put(data, :task_id, task_id)
+					|> check_data([
+						{:caption, &Maybe.maybe_to_string/1, &is_binary/1},
+						{:link, &Maybe.maybe_to_string/1, &(is_binary(&1) and Regex.match?(@imgregexp, &1))},
+						{:task_id, &Maybe.to_integer/1, &(is_integer(&1) and (&1 > 0))}]) do
+				data = %{caption: _, link: _, task_id: _} ->
+					case get_connection_details(token, country) do
+						error = %Myswt.Proto{} -> error
+						%{uid: uid} ->
+							:ok = Upup.Storage.new_item(data, uid)
+							%Myswt.Proto{subject: "notice", content: "фото добавлено"}
+					end
+				some ->
+					%Myswt.Proto{content: "неверный запрос #{inspect some}"}
+			end
+			|> Myswt.encode
+		end
+		def handle_myswt(%Myswt.Proto{subject: "save_item", content: %{token: token, country: country, id: id, data: data = %{}}}) do
+			case check_data(data, [
+					{:caption, &Maybe.maybe_to_string/1, &is_binary/1},
+					{:link, &Maybe.maybe_to_string/1, &(is_binary(&1) and Regex.match?(@imgregexp, &1))},
+					{:task_id, &Maybe.to_integer/1, &(is_integer(&1) and (&1 > 0))}]) do
+				empty when (empty == %{}) -> %Myswt.Proto{content: "пустой запрос"}
+				data = %{} ->
+					case get_connection_details(token, country) do
+						error = %Myswt.Proto{} -> error
+						%{uid: uid} ->
+							case Upup.Storage.save_item(data, uid, id) do
+								:ok -> %Myswt.Proto{subject: "notice", content: "фото сохранено"}
+								{:error, error} -> %Myswt.Proto{content: "ошибка при mysql запросе! #{inspect error}"}
+							end
+
+					end
+			end
+			|> Myswt.encode
+		end
+		def handle_myswt(%Myswt.Proto{subject: "delete_item", content: %{token: token, country: country, id: id}}) do
+			case get_connection_details(token, country) do
+				error = %Myswt.Proto{} -> error
+				%{uid: uid} ->
+					:ok = Upup.Storage.delete_item(%{uid: uid, id: id})
+					%Myswt.Proto{subject: "notice", content: "фото удалено"}
 			end
 			|> Myswt.encode
 		end

@@ -92,6 +92,43 @@ defmodule Upup.Storage do
 		%{error: []} = [Map.put(data, :upload_result, "ok")] |> Sqlx.insert_ignore([:gid, :aid, :task_id, :album_name, :upload_result], "albums", @pool)
 		:ok
 	end
+	def save_album(data = %{}, uid, id) do
+		[%{uid: ^uid}] = "SELECT tasks.uid AS uid FROM tasks LEFT JOIN albums ON albums.task_id = tasks.id WHERE albums.id = ?;" |> Sqlx.exec([id], @pool)
+		keys = Map.keys(data)
+		case	Stream.map(keys, &("UPDATE albums SET #{&1} = ? WHERE id = #{id}"))
+				|> Enum.join(";")
+				|> Sqlx.exec(Enum.map(keys, &(Map.get(data,&1))), @pool) do
+			%{error: []} -> :ok
+			%{error: error} -> {:error, error}
+		end
+	end
+	def delete_album(%{uid: uid, id: id}) do
+		[%{uid: ^uid}] = "SELECT tasks.uid AS uid FROM tasks LEFT JOIN albums ON albums.task_id = tasks.id WHERE albums.id = ?;" |> Sqlx.exec([id], @pool)
+		%{error: []} = "DELETE FROM albums WHERE id = ?;" |> Sqlx.exec([id], @pool)
+		:ok
+	end
+
+
+	def new_item(data = %{task_id: id}, uid) do
+		[%{uid: ^uid}] = "SELECT uid FROM tasks WHERE id = ?;" |> Sqlx.exec([id], @pool)
+		%{error: []} = Sqlx.insert_ignore([data], [:link, :task_id, :caption], "items", @pool)
+		:ok
+	end
+	def save_item(data = %{}, uid, id) do
+		[%{uid: ^uid}] = "SELECT tasks.uid AS uid FROM tasks LEFT JOIN items ON items.task_id = tasks.id WHERE items.id = ?;" |> Sqlx.exec([id], @pool)
+		keys = Map.keys(data)
+		case	Stream.map(keys, &("UPDATE items SET #{&1} = ? WHERE id = #{id}"))
+				|> Enum.join(";")
+				|> Sqlx.exec(Enum.map(keys, &(Map.get(data,&1))), @pool) do
+			%{error: []} -> :ok
+			%{error: error} -> {:error, error}
+		end
+	end
+	def delete_item(%{uid: uid, id: id}) do
+		[%{uid: ^uid}] = "SELECT tasks.uid AS uid FROM tasks LEFT JOIN items ON items.task_id = tasks.id WHERE items.id = ?;" |> Sqlx.exec([id], @pool)
+		%{error: []} = "DELETE FROM items WHERE id = ?;" |> Sqlx.exec([id], @pool)
+		:ok
+	end
 
 
 end
