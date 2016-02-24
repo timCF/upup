@@ -188,8 +188,8 @@ defmodule Upup.Myswt do
 								:ok = Upup.Storage.save_account(%{uid: uid, country: country, token: token})
 								%{first_name: name, uid: uid, proxy: proxy}
 						end
-					_ ->
-						%Myswt.Proto{content: "wrong application token, access denied!"}
+					some ->
+						%Myswt.Proto{content: "wrong application token got perm #{inspect some}, access denied!"}
 				end
 		end
 	end
