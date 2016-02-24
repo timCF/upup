@@ -1,6 +1,9 @@
 defmodule Upup do
   use Application
-  use Silverb, [{"@proxy_ttl",:timer.minutes(5)}]
+  use Silverb, [
+	  {"@proxy_ttl",:timer.minutes(5)},
+	  {"@proxy_port", Application.get_env(:upup, :proxy_port)}
+  ]
   use Logex, [ttl: 100]
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
@@ -33,10 +36,10 @@ defmodule Upup do
 		end
 	end
 	def get_proxy_process(country) do
-		  case System.cmd("phantomjs", ["#{Exutils.priv_dir(:upup)}/getproxy.js",country]) do
+		  case System.cmd("phantomjs", ["#{Exutils.priv_dir(:upup)}/getproxy.js",country,@proxy_port]) do
 			  {text, 0} when is_binary(text) ->
 				  case Jazz.decode(text) do
-					  {:ok, lst = [_|_]} -> lst
+					  {:ok, lst = [_|_]} -> Enum.map(lst, &("#{&1}:#{@proxy_port}"))
 					  some ->
 						  Upup.error("error on decoding proxy-list for country #{country}, got #{inspect some}, #{text}")
 						  []

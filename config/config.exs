@@ -21,10 +21,13 @@ use Mix.Config
 #     config :logger, level: :info
 #
 
+config :upup,
+	proxy_port: "8080"
+
 config :myswt,
-   app: :upup,
-   server_port: 8041,
-   callback_module: Upup.Myswt
+	app: :upup,
+	server_port: 8041,
+	callback_module: Upup.Myswt
 
 config :sqlx,
 	timeout: 5000,
