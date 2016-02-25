@@ -1,6 +1,7 @@
 defmodule Upup.Myswt do
 	use Silverb, [
-		{"@imgregexp", ~r/^http(s)?\:\/\/(cs|pp)\d*\.vk\.me/}
+		{"@imgregexp", ~r/^http(s)?\:\/\/(cs|pp)\d*\.vk\.me/},
+		{"@proxy_whitelist_ttl", :timer.minutes(5)}
 	]
 	require Myswt
 	Myswt.callback_module do
@@ -182,6 +183,7 @@ defmodule Upup.Myswt do
 			proxy ->
 				case Exvk.Auth.get_permissions(token, proxy) do
 					2079998 ->
+						Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @proxy_whitelist_ttl)
 						case Exvk.Auth.get_my_name(token, proxy) do
 							{:error, error} -> %Myswt.Proto{content: "cannot get account details for token, error #{inspect error}"}
 							%{first_name: name, uid: uid} ->
@@ -189,6 +191,7 @@ defmodule Upup.Myswt do
 								%{first_name: name, uid: uid, proxy: proxy}
 						end
 					some ->
+						if (is_integer(some) and (some >= 0)), do: Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @proxy_whitelist_ttl)
 						%Myswt.Proto{content: "wrong application token got perm #{inspect some}, access denied!"}
 				end
 		end

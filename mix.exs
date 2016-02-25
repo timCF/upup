@@ -25,7 +25,8 @@ defmodule Upup.Mixfile do
 						:tinca,
 						:exutils,
 						:jazz,
-						:httpoison
+						:httpoison,
+						:cachex
 					],
      mod: {Upup, []}]
   end
@@ -50,7 +51,8 @@ defmodule Upup.Mixfile do
 		{:tinca, github: "timCF/tinca"},
 		{:exutils, github: "timCF/exutils"},
 		{:jazz, github: "meh/jazz"},
-		{:httpoison, github: "edgurgel/httpoison"}
+		{:httpoison, github: "edgurgel/httpoison"},
+		{:cachex, github: "timCF/cachex"}
 	]
   end
 end

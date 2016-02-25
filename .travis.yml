@@ -1,0 +1,16 @@
+os:
+- linux
+language: elixir
+elixir:
+- 1.2.2
+otp_release:
+- 18.2.1
+notifications:
+  email: false
+script:
+- echo "getting cibash scripts"
+- wget https://github.com/timCF/cibash/archive/0.0.3.tar.gz
+- tar xvzf ./0.0.3.tar.gz
+- echo "START elixir build script"
+- "./cibash-0.0.3/elixir_yandex.sh upup upup rel"
+- echo "END elixir build script"

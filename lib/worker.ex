@@ -1,5 +1,8 @@
 defmodule Upup.Worker do
-	use Silverb, [{"@ttl", :timer.seconds(30)}]
+	use Silverb, [
+		{"@ttl", :timer.seconds(30)},
+		{"@proxy_whitelist_ttl", :timer.minutes(5)}
+	]
 	use GenServer
 
 	def start_link(args), do: GenServer.start_link(__MODULE__, args)
@@ -64,6 +67,7 @@ defmodule Upup.Worker do
 			case Exvk.Photos.get(%{gid: gid, aid: aid}, token, proxy) do
 				{:error, error} -> {:error, "error on getting photos #{inspect error}"}
 				lst when is_list(lst) ->
+					Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @proxy_whitelist_ttl)
 					case Stream.filter_map(lst,
 							fn(%{user_id: user_id}) -> user_id == uid end,
 							fn(%{pid: pid}) -> pid end) |> Enum.uniq do
@@ -86,6 +90,7 @@ defmodule Upup.Worker do
 				{:ok, filename} ->
 					case Exvk.Photos.upload(%{gid: gid, aid: aid, path: filename, caption: caption}, token, proxy) do
 						:ok ->
+							Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @proxy_whitelist_ttl)
 							File.rm!(filename)
 							:ok
 						{:error, error} ->
