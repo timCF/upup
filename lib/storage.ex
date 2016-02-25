@@ -71,7 +71,7 @@ defmodule Upup.Storage do
 
 
 	def get_albums4task(%Upup.Task{id: id, ttl: ttl}) do
-		"SELECT gid, aid, task_id, album_name, upload_result FROM albums WHERE task_id = ? AND TIMESTAMPDIFF(SECOND, stamp, NOW()) > ?;"
+		"SELECT gid, aid, task_id, album_name, upload_result FROM albums WHERE task_id = ? AND ((TIMESTAMPDIFF(SECOND, stamp, NOW()) > ?) OR (upload_result != 'ok'));"
 		|> Sqlx.exec([id, ttl], @pool)
 		|> Enum.map(fn(%{gid: gid, aid: aid, task_id: task_id, album_name: album_name, upload_result: upload_result}) -> %Upup.Album{gid: gid, aid: aid, task_id: task_id, album_name: album_name, upload_result: upload_result} end)
 	end
