@@ -2,9 +2,9 @@ var page = require('webpage').create();
 var system = require('system');
 var submitted = false;
 var exit = function(code){
-	setTimeout(function(){ phantom.exit(code); }, 1000);
-	if(page){page.close()};
 	phantom.onError = function(){};
+	setTimeout(function(){phantom.exit(code);}, 3000);
+	if(page){page.close();};
 };
 page.onInitialized = function() {
 	page.onCallback = function(data) {

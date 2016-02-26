@@ -2,6 +2,7 @@ defmodule Upup do
   use Application
   use Silverb, [
 	  {"@proxy_ttl",:timer.minutes(1)},
+	  {"@proxy_cache",:timer.minutes(60)},
 	  {"@proxy_port", Application.get_env(:upup, :proxy_port)}
   ]
   use Logex, [ttl: 100]
@@ -31,12 +32,17 @@ defmodule Upup do
 
 
 	def getproxy(country) do
-		case Tinca.memo(&get_proxy_process/1, [country], @proxy_ttl) |> Enum.shuffle do
-			[] -> nil
-			lst = [el|_] ->
-				case Enum.filter(lst, &(Tinca.WeakLinks.get({:proxy_whitelist, &1}) == true)) do
-					[] -> el
-					[el|_] -> el
+		case Tinca.WeakLinks.get(:proxy_whitelist_content) do
+			lst = [_|_] -> Enum.random(lst)
+			_ -> case Tinca.memo(&get_proxy_process/1, [country], @proxy_ttl) |> Enum.shuffle do
+					[] -> nil
+					lst = [el|_] ->
+						case Enum.filter(lst, &(Tinca.WeakLinks.get({:proxy_whitelist, &1}) == true)) do
+							[] -> el
+							lst = [el|_] ->
+								Tinca.WeakLinks.make(:proxy_whitelist_content, lst, @proxy_cache)
+								el
+						end
 				end
 		end
 	end

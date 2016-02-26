@@ -1,6 +1,6 @@
 defmodule Upup.Proxy do
 	use Silverb, [
-		{"@ttl", :timer.minutes(5)}
+		{"@ttl", :timer.minutes(1)}
 	]
 	use ExActor.GenServer, export: true
 	definit do
