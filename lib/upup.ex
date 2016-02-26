@@ -3,9 +3,11 @@ defmodule Upup do
   use Silverb, [
 	  {"@proxy_ttl",:timer.minutes(1)},
 	  {"@proxy_cache",:timer.minutes(60)},
-	  {"@proxy_port", Application.get_env(:upup, :proxy_port)}
+	  {"@proxy_port", Application.get_env(:upup, :proxy_port)},
+	  {"@phantom_ttl", :timer.minutes(5)}
   ]
   use Logex, [ttl: 100]
+  require Exutils
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
@@ -49,11 +51,11 @@ defmodule Upup do
 
 	def get_proxy_process(_, attempt \\ 0)
 	def get_proxy_process(country, attempt) when (attempt < 10) do
-		case System.cmd("phantomjs", ["--web-security=no","#{Exutils.priv_dir(:upup)}/getproxy.js",@proxy_port]) do
+		case System.cmd("phantomjs", ["--web-security=no","#{Exutils.priv_dir(:upup)}/getproxy.js",@proxy_port]) |> Exutils.safe(@phantom_ttl)  do
 			{text, 0} when is_binary(text) ->
 				case Jazz.decode(text) do
 					{:ok, lst = [_|_]} ->
-						case System.cmd("phantomjs", ["--web-security=no","--proxy=#{Enum.random(lst)}:#{@proxy_port}", "#{Exutils.priv_dir(:upup)}/spys.js", country]) do
+						case System.cmd("phantomjs", ["--web-security=no","--proxy=#{Enum.random(lst)}:#{@proxy_port}", "#{Exutils.priv_dir(:upup)}/spys.js", country]) |> Exutils.safe(@phantom_ttl) do
 							{text, 0} when is_binary(text) ->
 								case Jazz.decode(text) do
 									{:ok, lst = [_|_]} -> lst
