@@ -43,11 +43,11 @@ defmodule Upup do
 
 	def get_proxy_process(_, attempt \\ 0)
 	def get_proxy_process(country, attempt) when (attempt < 10) do
-		case System.cmd("phantomjs", ["#{Exutils.priv_dir(:upup)}/getproxy.js",@proxy_port]) do
+		case System.cmd("phantomjs", ["--web-security=no","#{Exutils.priv_dir(:upup)}/getproxy.js",@proxy_port]) do
 			{text, 0} when is_binary(text) ->
 				case Jazz.decode(text) do
 					{:ok, lst = [_|_]} ->
-						case System.cmd("phantomjs", ["--proxy=#{Enum.random(lst)}:#{@proxy_port}", "#{Exutils.priv_dir(:upup)}/spys.js", country]) do
+						case System.cmd("phantomjs", ["--web-security=no","--proxy=#{Enum.random(lst)}:#{@proxy_port}", "#{Exutils.priv_dir(:upup)}/spys.js", country]) do
 							{text, 0} when is_binary(text) ->
 								case Jazz.decode(text) do
 									{:ok, lst = [_|_]} -> lst
