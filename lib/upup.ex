@@ -43,20 +43,34 @@ defmodule Upup do
 
 	def get_proxy_process(_, attempt \\ 0)
 	def get_proxy_process(country, attempt) when (attempt < 10) do
-		  case System.cmd("phantomjs", ["#{Exutils.priv_dir(:upup)}/spys.js",country,@proxy_port]) do
-			  {text, 0} when is_binary(text) ->
-				  case Jazz.decode(text) do
-					  {:ok, lst = [_|_]} -> lst
-					  some ->
-						  Upup.error("error on decoding proxy-list for country #{country}, got #{inspect some}, #{text}")
-						  :timer.sleep(1000)
-						  get_proxy_process(country, attempt + 1)
-				  end
-			  some ->
-				  Upup.error("error on getting proxy-list for country #{country}, got #{inspect some}")
-				  :timer.sleep(1000)
-				  get_proxy_process(country, attempt + 1)
-		  end
+		case System.cmd("phantomjs", ["#{Exutils.priv_dir(:upup)}/getproxy.js",@proxy_port]) do
+			{text, 0} when is_binary(text) ->
+				case Jazz.decode(text) do
+					{:ok, lst = [_|_]} ->
+						case System.cmd("phantomjs", ["--proxy=#{Enum.random(lst)}:#{@proxy_port}", "#{Exutils.priv_dir(:upup)}/spys.js", country]) do
+							{text, 0} when is_binary(text) ->
+								case Jazz.decode(text) do
+									{:ok, lst = [_|_]} -> lst
+									some ->
+										Upup.error("error on decoding proxy-list for country #{country}, got #{inspect some}, #{text}")
+										:timer.sleep(1000)
+										get_proxy_process(country, attempt + 1)
+								end
+							some ->
+								Upup.error("error on getting proxy-list for country #{country}, got #{inspect some}")
+								:timer.sleep(1000)
+								get_proxy_process(country, attempt + 1)
+						end
+					some ->
+						Upup.error("error on decoding PRE-proxy, got #{inspect some}, #{text}")
+						:timer.sleep(1000)
+						get_proxy_process(country, attempt + 1)
+				end
+			some ->
+				Upup.error("error on getting PRE-proxy, got #{inspect some}")
+				:timer.sleep(1000)
+				get_proxy_process(country, attempt + 1)
+		end
 	end
 	def get_proxy_process(_,_), do: []
 

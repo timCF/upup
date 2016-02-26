@@ -22,7 +22,7 @@ use Mix.Config
 #
 
 config :upup,
-	proxy_port: "8080"
+	proxy_port: "80"
 
 config :exvk,
 	http_timeout: 5000
