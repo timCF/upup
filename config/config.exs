@@ -25,7 +25,7 @@ config :upup,
 	proxy_port: "8080"
 
 config :exvk,
-	http_timeout: 60000
+	http_timeout: 5000
 
 config :myswt,
 	app: :upup,
