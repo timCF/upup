@@ -1,6 +1,12 @@
 var page = require('webpage').create();
 var system = require('system');
 var submitted = false;
+var exit = function(code){
+	if (page) page.close();
+	setTimeout(function(){ phantom.exit(code); }, 0);
+	phantom.onError = function(){};
+	throw new Error('');
+};
 page.onInitialized = function() {
 	page.onCallback = function(data) {
 		if(submitted){
@@ -10,7 +16,7 @@ page.onInitialized = function() {
 				.map(function(el){return (el[1]+el[2]);})
 					;});
 			console.log(JSON.stringify(arr));
-			phantom.exit();
+			exit(0);
 		}else{
 			page.evaluate(function(){
 				document.getElementById('xpp').selectedIndex = 3;
