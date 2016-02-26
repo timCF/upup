@@ -89,7 +89,7 @@ defmodule Upup.Storage do
 
 	def new_album(data = %{task_id: id}, uid) do
 		[%{uid: ^uid}] = "SELECT uid FROM tasks WHERE id = ?;" |> Sqlx.exec([id], @pool)
-		%{error: []} = [Map.put(data, :upload_result, "ok")] |> Sqlx.insert_ignore([:gid, :aid, :task_id, :album_name, :upload_result], "albums", @pool)
+		%{error: []} = [Map.put(data, :upload_result, "new")] |> Sqlx.insert_ignore([:gid, :aid, :task_id, :album_name, :upload_result], "albums", @pool)
 		:ok
 	end
 	def save_album(data = %{}, uid, id) do

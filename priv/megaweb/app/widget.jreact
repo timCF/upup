@@ -59,7 +59,7 @@ mixin new_album(task_id)
 			button.btn.btn-primary.fill(type="button" onClick=locals.handlers.new_album(locals.data.new.album[task_id], task_id)) добавить альбом
 mixin album(el)
 	- var key = el.task_id+"_"+el.gid+"_"+el.aid
-	- var style = (el.upload_result == "ok") ? "row_normal" : "row_error"
+	- var style = (el.upload_result == "new") ? "row_strange" : ((el.upload_result == "ok") ? "row_normal" : "row_error")
 	div.row.padded_top(class=style)
 		// gid, aid, task_id, album_name, upload_result
 		div.col-md-2
