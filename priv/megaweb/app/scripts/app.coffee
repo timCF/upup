@@ -147,7 +147,7 @@ actor = new Act(init_state, "pure", 500)
 #
 update_state = () ->
 	actor.cast((state) ->
-		if state.data.is_logined then to_server("get_account_data", {token: state.opts.token, country: state.opts.country})
+		if (state.data.is_logined or state.data.is_entering) then to_server("get_account_data", {token: state.opts.token, country: state.opts.country})
 		state)
 	setTimeout(update_state, 3000)
 to_server = (subject, content) ->

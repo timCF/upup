@@ -55,10 +55,13 @@ body
   margin: 0
 .preloader
   position: fixed
-  top: -40%
-  right: 0
-  bottom: 0
-  left: 0
+  top: 50%
+  left: 50%
+  -moz-transform: translate(-225px, -225px)
+  -ms-transform: translate(-225px, -225px)
+  -webkit-transform: translate(-225px, -225px)
+  -o-transform: translate(-225px, -225px)
+  transform: translate(-225px, -225px)
 
 =keyframes($name)
   @-webkit-keyframes #{$name}
@@ -98,1288 +101,167 @@ body
 //
 // PRELODER
 //
-.cssload-cube, .cssload-half1, .cssload-half2
-  transform-style: preserve-3d
-  -o-transform-style: preserve-3d
-  -ms-transform-style: preserve-3d
-  -webkit-transform-style: preserve-3d
-  -moz-transform-style: preserve-3d
-
-.cssload-container
-  transform-style: preserve-3d
-  -o-transform-style: preserve-3d
-  -ms-transform-style: preserve-3d
-  -webkit-transform-style: preserve-3d
-  -moz-transform-style: preserve-3d
+.cssload-wrap
+  width: 450px
+  height: 450px
+  margin: 225px auto
   position: relative
-  width: 588px
-  height: 588px
-  margin: 881px auto 0
-  perspective: 1763px
-  -o-perspective: 1763px
-  -ms-perspective: 1763px
-  -webkit-perspective: 1763px
-  -moz-perspective: 1763px
+  perspective: 9000px
+  -o-perspective: 9000px
+  -ms-perspective: 9000px
+  -webkit-perspective: 9000px
+  -moz-perspective: 9000px
   transform-style: preserve-3d
   -o-transform-style: preserve-3d
   -ms-transform-style: preserve-3d
   -webkit-transform-style: preserve-3d
   -moz-transform-style: preserve-3d
 
-.cssload-cube
-  width: 588px
-  height: 588px
+.cssload-circle
   transform-style: preserve-3d
   -o-transform-style: preserve-3d
   -ms-transform-style: preserve-3d
   -webkit-transform-style: preserve-3d
   -moz-transform-style: preserve-3d
-  animation: cube 3s forwards infinite
-  -o-animation: cube 3s forwards infinite
-  -ms-animation: cube 3s forwards infinite
-  -webkit-animation: cube 3s forwards infinite
-  -moz-animation: cube 3s forwards infinite
-  transform-origin: center 294px
-  -o-transform-origin: center 294px
-  -ms-transform-origin: center 294px
-  -webkit-transform-origin: center 294px
-  -moz-transform-origin: center 294px
-
-.cssload-half1
-  height: 235px
-  top: 0
+  box-sizing: border-box
+  -o-box-sizing: border-box
+  -ms-box-sizing: border-box
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  opacity: 0
+  width: 450px
+  height: 450px
+  border: 5px solid rgba(191, 226, 202, 0.81)
+  border-radius: 338px
   position: absolute
-  animation: half-fold 3s forwards infinite
-  -o-animation: half-fold 3s forwards infinite
-  -ms-animation: half-fold 3s forwards infinite
-  -webkit-animation: half-fold 3s forwards infinite
-  -moz-animation: half-fold 3s forwards infinite
-  transform-origin: 50% 100%
-  -o-transform-origin: 50% 100%
-  -ms-transform-origin: 50% 100%
-  -webkit-transform-origin: 50% 100%
-  -moz-transform-origin: 50% 100%
-
-.cssload-side
-  width: 118px
-  height: 118px
-  background: rgb(221, 221, 221)
-  position: absolute
-
-.cssload-s1
   top: 0
-  left: 235px
-  transform-origin: 50% 100%
-  -o-transform-origin: 50% 100%
-  -ms-transform-origin: 50% 100%
-  -webkit-transform-origin: 50% 100%
-  -moz-transform-origin: 50% 100%
-  animation: s1ani 3s forwards infinite
-  -o-animation: s1ani 3s forwards infinite
-  -ms-animation: s1ani 3s forwards infinite
-  -webkit-animation: s1ani 3s forwards infinite
-  -moz-animation: s1ani 3s forwards infinite
+  left: 0
+  animation: cssload-spin 9s ease-in-out alternate infinite
+  -o-animation: cssload-spin 9s ease-in-out alternate infinite
+  -ms-animation: cssload-spin 9s ease-in-out alternate infinite
+  -webkit-animation: cssload-spin 9s ease-in-out alternate infinite
+  -moz-animation: cssload-spin 9s ease-in-out alternate infinite
+  &:nth-of-type(1)
+    animation-delay: 150ms
+    -o-animation-delay: 150ms
+    -ms-animation-delay: 150ms
+    -webkit-animation-delay: 150ms
+    -moz-animation-delay: 150ms
+  &:nth-of-type(2)
+    animation-delay: 300ms
+    -o-animation-delay: 300ms
+    -ms-animation-delay: 300ms
+    -webkit-animation-delay: 300ms
+    -moz-animation-delay: 300ms
+  &:nth-of-type(3)
+    animation-delay: 450ms
+    -o-animation-delay: 450ms
+    -ms-animation-delay: 450ms
+    -webkit-animation-delay: 450ms
+    -moz-animation-delay: 450ms
+  &:nth-of-type(4)
+    animation-delay: 600ms
+    -o-animation-delay: 600ms
+    -ms-animation-delay: 600ms
+    -webkit-animation-delay: 600ms
+    -moz-animation-delay: 600ms
+  &:nth-of-type(5)
+    animation-delay: 750ms
+    -o-animation-delay: 750ms
+    -ms-animation-delay: 750ms
+    -webkit-animation-delay: 750ms
+    -moz-animation-delay: 750ms
 
-.cssload-s2
-  top: 118px
-  left: 235px
-  transform-origin: 50% 0%
-  -o-transform-origin: 50% 0%
-  -ms-transform-origin: 50% 0%
-  -webkit-transform-origin: 50% 0%
-  -moz-transform-origin: 50% 0%
-  animation: s2ani 3s forwards infinite
-  -o-animation: s2ani 3s forwards infinite
-  -ms-animation: s2ani 3s forwards infinite
-  -webkit-animation: s2ani 3s forwards infinite
-  -moz-animation: s2ani 3s forwards infinite
-
-.cssload-s3
-  top: 235px
-  left: 235px
-  transform-origin: 50% 0%
-  -o-transform-origin: 50% 0%
-  -ms-transform-origin: 50% 0%
-  -webkit-transform-origin: 50% 0%
-  -moz-transform-origin: 50% 0%
-  animation: s3ani 3s forwards infinite
-  -o-animation: s3ani 3s forwards infinite
-  -ms-animation: s3ani 3s forwards infinite
-  -webkit-animation: s3ani 3s forwards infinite
-  -moz-animation: s3ani 3s forwards infinite
-
-.cssload-s4
-  top: 353px
-  left: 235px
-  transform-origin: 50% 0%
-  -o-transform-origin: 50% 0%
-  -ms-transform-origin: 50% 0%
-  -webkit-transform-origin: 50% 0%
-  -moz-transform-origin: 50% 0%
-  animation: s4ani 3s forwards infinite
-  -o-animation: s4ani 3s forwards infinite
-  -ms-animation: s4ani 3s forwards infinite
-  -webkit-animation: s4ani 3s forwards infinite
-  -moz-animation: s4ani 3s forwards infinite
-
-.cssload-s5
-  left: 118px
-  top: 118px
-  transform-origin: 100% 50%
-  -o-transform-origin: 100% 50%
-  -ms-transform-origin: 100% 50%
-  -webkit-transform-origin: 100% 50%
-  -moz-transform-origin: 100% 50%
-  animation: s5ani 3s forwards infinite
-  -o-animation: s5ani 3s forwards infinite
-  -ms-animation: s5ani 3s forwards infinite
-  -webkit-animation: s5ani 3s forwards infinite
-  -moz-animation: s5ani 3s forwards infinite
-
-.cssload-s6
-  left: 353px
-  top: 235px
-  transform-origin: 0% 50%
-  -o-transform-origin: 0% 50%
-  -ms-transform-origin: 0% 50%
-  -webkit-transform-origin: 0% 50%
-  -moz-transform-origin: 0% 50%
-  animation: s6ani 3s forwards infinite
-  -o-animation: s6ani 3s forwards infinite
-  -ms-animation: s6ani 3s forwards infinite
-  -webkit-animation: s6ani 3s forwards infinite
-  -moz-animation: s6ani 3s forwards infinite
-
-@keyframes cube
+@keyframes cssload-spin
   0%
-    transform: rotateX(0deg)
+    transform: rotateY(0deg) rotateX(0deg)
+    opacity: 1
 
-  30%
-    transform: rotateX(0deg)
+  25%
+    transform: rotateY(180deg) rotateX(360deg)
 
-  40%
-    transform: rotateX(45deg) rotateY(0deg) rotateZ(45deg)
-    /* CUBE ROTATES BACK
-
-  60%
-    transform: rotateX(60deg) rotateY(0deg) rotateZ(45deg)
-    /* ARMS FOLD UP
-
-  65%
-    transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
-    /* SPIN REVEALS CYAN RIGHT, RED LEFT (s2)
-
-  70%
-    transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
+  50%
+    transform: rotateY(540deg) rotateX(540deg)
 
   75%
-    transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-    /* SPIN REVEALS MAGENTA RIGHT, YELLOW LEFT (s4)
+    transform: rotateY(720deg) rotateX(900deg)
 
-  80%
-    transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-
-  90%
-    transform: rotateX(0deg) rotate(0deg) rotateZ(0deg)
-    /* FADE TO BLACK
+  100%
+    transform: rotateY(900deg) rotateX(1080deg)
+    opacity: 1
 
 
-@-o-keyframes cube
+@-o-keyframes cssload-spin
   0%
-    -o-transform: rotateX(0deg)
+    -o-transform: rotateY(0deg) rotateX(0deg)
+    opacity: 1
 
-  30%
-    -o-transform: rotateX(0deg)
+  25%
+    -o-transform: rotateY(180deg) rotateX(360deg)
 
-  40%
-    -o-transform: rotateX(45deg) rotateY(0deg) rotateZ(45deg)
-    /* CUBE ROTATES BACK
-
-  60%
-    -o-transform: rotateX(60deg) rotateY(0deg) rotateZ(45deg)
-    /* ARMS FOLD UP
-
-  65%
-    -o-transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
-    /* SPIN REVEALS CYAN RIGHT, RED LEFT (s2)
-
-  70%
-    -o-transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
+  50%
+    -o-transform: rotateY(540deg) rotateX(540deg)
 
   75%
-    -o-transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-    /* SPIN REVEALS MAGENTA RIGHT, YELLOW LEFT (s4)
+    -o-transform: rotateY(720deg) rotateX(900deg)
 
-  80%
-    -o-transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-
-  90%
-    -o-transform: rotateX(0deg) rotate(0deg) rotateZ(0deg)
-    /* FADE TO BLACK
+  100%
+    -o-transform: rotateY(900deg) rotateX(1080deg)
+    opacity: 1
 
 
-@-ms-keyframes cube
+@-ms-keyframes cssload-spin
   0%
-    -ms-transform: rotateX(0deg)
+    -ms-transform: rotateY(0deg) rotateX(0deg)
+    opacity: 1
 
-  30%
-    -ms-transform: rotateX(0deg)
+  25%
+    -ms-transform: rotateY(180deg) rotateX(360deg)
 
-  40%
-    -ms-transform: rotateX(45deg) rotateY(0deg) rotateZ(45deg)
-    /* CUBE ROTATES BACK
-
-  60%
-    -ms-transform: rotateX(60deg) rotateY(0deg) rotateZ(45deg)
-    /* ARMS FOLD UP
-
-  65%
-    -ms-transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
-    /* SPIN REVEALS CYAN RIGHT, RED LEFT (s2)
-
-  70%
-    -ms-transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
+  50%
+    -ms-transform: rotateY(540deg) rotateX(540deg)
 
   75%
-    -ms-transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-    /* SPIN REVEALS MAGENTA RIGHT, YELLOW LEFT (s4)
+    -ms-transform: rotateY(720deg) rotateX(900deg)
 
-  80%
-    -ms-transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-
-  90%
-    -ms-transform: rotateX(0deg) rotate(0deg) rotateZ(0deg)
-    /* FADE TO BLACK
+  100%
+    -ms-transform: rotateY(900deg) rotateX(1080deg)
+    opacity: 1
 
 
-@-webkit-keyframes cube
+@-webkit-keyframes cssload-spin
   0%
-    -webkit-transform: rotateX(0deg)
+    -webkit-transform: rotateY(0deg) rotateX(0deg)
+    opacity: 1
 
-  30%
-    -webkit-transform: rotateX(0deg)
+  25%
+    -webkit-transform: rotateY(180deg) rotateX(360deg)
 
-  40%
-    -webkit-transform: rotateX(45deg) rotateY(0deg) rotateZ(45deg)
-    /* CUBE ROTATES BACK
-
-  60%
-    -webkit-transform: rotateX(60deg) rotateY(0deg) rotateZ(45deg)
-    /* ARMS FOLD UP
-
-  65%
-    -webkit-transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
-    /* SPIN REVEALS CYAN RIGHT, RED LEFT (s2)
-
-  70%
-    -webkit-transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
+  50%
+    -webkit-transform: rotateY(540deg) rotateX(540deg)
 
   75%
-    -webkit-transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-    /* SPIN REVEALS MAGENTA RIGHT, YELLOW LEFT (s4)
+    -webkit-transform: rotateY(720deg) rotateX(900deg)
 
-  80%
-    -webkit-transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-
-  90%
-    -webkit-transform: rotateX(0deg) rotate(0deg) rotateZ(0deg)
-    /* FADE TO BLACK
+  100%
+    -webkit-transform: rotateY(900deg) rotateX(1080deg)
+    opacity: 1
 
 
-@-moz-keyframes cube
+@-moz-keyframes cssload-spin
   0%
-    -moz-transform: rotateX(0deg)
+    -moz-transform: rotateY(0deg) rotateX(0deg)
+    opacity: 1
 
-  30%
-    -moz-transform: rotateX(0deg)
+  25%
+    -moz-transform: rotateY(180deg) rotateX(360deg)
 
-  40%
-    -moz-transform: rotateX(45deg) rotateY(0deg) rotateZ(45deg)
-    /* CUBE ROTATES BACK
-
-  60%
-    -moz-transform: rotateX(60deg) rotateY(0deg) rotateZ(45deg)
-    /* ARMS FOLD UP
-
-  65%
-    -moz-transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
-    /* SPIN REVEALS CYAN RIGHT, RED LEFT (s2)
-
-  70%
-    -moz-transform: rotateX(60deg) rotate(45deg) rotateZ(180deg)
+  50%
+    -moz-transform: rotateY(540deg) rotateX(540deg)
 
   75%
-    -moz-transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-    /* SPIN REVEALS MAGENTA RIGHT, YELLOW LEFT (s4)
-
-  80%
-    -moz-transform: rotateX(60deg) rotate(45deg) rotateZ(360deg)
-
-  90%
-    -moz-transform: rotateX(0deg) rotate(0deg) rotateZ(0deg)
-    /* FADE TO BLACK
-
-
-@keyframes s1ani
-  0%
-    opacity: 1
-    transform: translateY(0px)
-    background: rgb(221, 221, 221)
-
-  40%
-    transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    transform: rotateX(-90deg)
-    background: rgb(221, 221, 221)
-
-  90%
-    transform: rotateX(-90deg)
-
-
-@-o-keyframes s1ani
-  0%
-    opacity: 1
-    -o-transform: translateY(0px)
-    background: rgb(221, 221, 221)
-
-  40%
-    -o-transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    -o-transform: rotateX(-90deg)
-    background: rgb(221, 221, 221)
-
-  90%
-    -o-transform: rotateX(-90deg)
-
-
-@-ms-keyframes s1ani
-  0%
-    opacity: 1
-    -ms-transform: translateY(0px)
-    background: rgb(221, 221, 221)
-
-  40%
-    -ms-transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    -ms-transform: rotateX(-90deg)
-    background: rgb(221, 221, 221)
-
-  90%
-    -ms-transform: rotateX(-90deg)
-
-
-@-webkit-keyframes s1ani
-  0%
-    opacity: 1
-    -webkit-transform: translateY(0px)
-    background: rgb(221, 221, 221)
-
-  40%
-    -webkit-transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    -webkit-transform: rotateX(-90deg)
-    background: rgb(221, 221, 221)
-
-  90%
-    -webkit-transform: rotateX(-90deg)
-
-
-@-moz-keyframes s1ani
-  0%
-    opacity: 1
-    -moz-transform: translateY(0px)
-    background: rgb(221, 221, 221)
-
-  40%
-    -moz-transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    -moz-transform: rotateX(-90deg)
-    background: rgb(221, 221, 221)
-
-  90%
-    -moz-transform: rotateX(-90deg)
-
-
-@keyframes s2ani
-  0%
-    opacity: 0
-    transform: rotateX(-179deg)
-
-  10%
-    opacity: 1
-    transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(180, 180, 180)
-
-  65%
-    opacity: 1
-    background: rgb(180, 180, 180)
-    /* DARKEST VISIBLE
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
+    -moz-transform: rotateY(720deg) rotateX(900deg)
 
   100%
-    opacity: 0
-
-
-@-o-keyframes s2ani
-  0%
-    opacity: 0
-    -o-transform: rotateX(-179deg)
-
-  10%
+    -moz-transform: rotateY(900deg) rotateX(1080deg)
     opacity: 1
-    -o-transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(180, 180, 180)
-
-  65%
-    opacity: 1
-    background: rgb(180, 180, 180)
-    /* DARKEST VISIBLE
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@-ms-keyframes s2ani
-  0%
-    opacity: 0
-    -ms-transform: rotateX(-179deg)
-
-  10%
-    opacity: 1
-    -ms-transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(180, 180, 180)
-
-  65%
-    opacity: 1
-    background: rgb(180, 180, 180)
-    /* DARKEST VISIBLE
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@-webkit-keyframes s2ani
-  0%
-    opacity: 0
-    -webkit-transform: rotateX(-179deg)
-
-  10%
-    opacity: 1
-    -webkit-transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(180, 180, 180)
-
-  65%
-    opacity: 1
-    background: rgb(180, 180, 180)
-    /* DARKEST VISIBLE
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@-moz-keyframes s2ani
-  0%
-    opacity: 0
-    -moz-transform: rotateX(-179deg)
-
-  10%
-    opacity: 1
-    -moz-transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(180, 180, 180)
-
-  65%
-    opacity: 1
-    background: rgb(180, 180, 180)
-    /* DARKEST VISIBLE
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@keyframes s3ani
-  0%
-    opacity: 0
-    transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-    transform: rotateX(-179deg)
-
-  20%
-    opacity: 1
-    transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(150, 150, 150)
-    /* DARKEST VISIBLE
-
-  90%
-    opacity: 1
-    transform: rotateX(0deg)
-
-  100%
-    opacity: 0
-
-
-@-o-keyframes s3ani
-  0%
-    opacity: 0
-    -o-transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-    -o-transform: rotateX(-179deg)
-
-  20%
-    opacity: 1
-    -o-transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(150, 150, 150)
-    /* DARKEST VISIBLE
-
-  90%
-    opacity: 1
-    -o-transform: rotateX(0deg)
-
-  100%
-    opacity: 0
-
-
-@-ms-keyframes s3ani
-  0%
-    opacity: 0
-    -ms-transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-    -ms-transform: rotateX(-179deg)
-
-  20%
-    opacity: 1
-    -ms-transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(150, 150, 150)
-    /* DARKEST VISIBLE
-
-  90%
-    opacity: 1
-    -ms-transform: rotateX(0deg)
-
-  100%
-    opacity: 0
-
-
-@-webkit-keyframes s3ani
-  0%
-    opacity: 0
-    -webkit-transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-    -webkit-transform: rotateX(-179deg)
-
-  20%
-    opacity: 1
-    -webkit-transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(150, 150, 150)
-    /* DARKEST VISIBLE
-
-  90%
-    opacity: 1
-    -webkit-transform: rotateX(0deg)
-
-  100%
-    opacity: 0
-
-
-@-moz-keyframes s3ani
-  0%
-    opacity: 0
-    -moz-transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-    -moz-transform: rotateX(-179deg)
-
-  20%
-    opacity: 1
-    -moz-transform: rotateX(0deg)
-
-  40%
-    background: rgb(221, 221, 221)
-
-  45%
-    background: rgb(150, 150, 150)
-    /* DARKEST VISIBLE
-
-  90%
-    opacity: 1
-    -moz-transform: rotateX(0deg)
-
-  100%
-    opacity: 0
-
-
-@keyframes s4ani
-  0%
-    opacity: 0
-    transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-
-  20%
-    opacity: 0
-    transform: rotateX(-179deg)
-
-  30%
-    opacity: 1
-    transform: rotateX(0deg)
-
-  40%
-    transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    transform: rotateX(90deg)
-    background: rgb(180, 180, 180)
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
-    transform: rotateX(90deg)
-
-  100%
-    opacity: 0
-
-
-@-o-keyframes s4ani
-  0%
-    opacity: 0
-    -o-transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-
-  20%
-    opacity: 0
-    -o-transform: rotateX(-179deg)
-
-  30%
-    opacity: 1
-    -o-transform: rotateX(0deg)
-
-  40%
-    -o-transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    -o-transform: rotateX(90deg)
-    background: rgb(180, 180, 180)
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
-    -o-transform: rotateX(90deg)
-
-  100%
-    opacity: 0
-
-
-@-ms-keyframes s4ani
-  0%
-    opacity: 0
-    -ms-transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-
-  20%
-    opacity: 0
-    -ms-transform: rotateX(-179deg)
-
-  30%
-    opacity: 1
-    -ms-transform: rotateX(0deg)
-
-  40%
-    -ms-transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    -ms-transform: rotateX(90deg)
-    background: rgb(180, 180, 180)
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
-    -ms-transform: rotateX(90deg)
-
-  100%
-    opacity: 0
-
-
-@-webkit-keyframes s4ani
-  0%
-    opacity: 0
-    -webkit-transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-
-  20%
-    opacity: 0
-    -webkit-transform: rotateX(-179deg)
-
-  30%
-    opacity: 1
-    -webkit-transform: rotateX(0deg)
-
-  40%
-    -webkit-transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    -webkit-transform: rotateX(90deg)
-    background: rgb(180, 180, 180)
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
-    -webkit-transform: rotateX(90deg)
-
-  100%
-    opacity: 0
-
-
-@-moz-keyframes s4ani
-  0%
-    opacity: 0
-    -moz-transform: rotateX(-179deg)
-
-  10%
-    opacity: 0
-
-  20%
-    opacity: 0
-    -moz-transform: rotateX(-179deg)
-
-  30%
-    opacity: 1
-    -moz-transform: rotateX(0deg)
-
-  40%
-    -moz-transform: rotateX(0deg)
-    background: rgb(221, 221, 221)
-
-  50%
-    -moz-transform: rotateX(90deg)
-    background: rgb(180, 180, 180)
-
-  80%
-    background: rgb(180, 180, 180)
-
-  90%
-    opacity: 1
-    -moz-transform: rotateX(90deg)
-
-  100%
-    opacity: 0
-
-
-@keyframes s5ani
-  0%
-    opacity: 0
-    transform: rotateY(-179deg)
-
-  10%
-    opacity: 0
-    transform: rotateY(-179deg)
-
-  20%
-    opacity: 1
-    background: rgb(221, 221, 221)
-    transform: rotateY(0deg)
-
-  40%
-    transform: rotateY(0deg)
-
-  50%
-    transform: rotateY(90deg)
-
-  55%
-    background: rgb(221, 221, 221)
-
-  60%
-    background: rgb(200, 200, 200)
-
-  90%
-    transform: rotateY(90deg)
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@-o-keyframes s5ani
-  0%
-    opacity: 0
-    -o-transform: rotateY(-179deg)
-
-  10%
-    opacity: 0
-    -o-transform: rotateY(-179deg)
-
-  20%
-    opacity: 1
-    background: rgb(221, 221, 221)
-    -o-transform: rotateY(0deg)
-
-  40%
-    -o-transform: rotateY(0deg)
-
-  50%
-    -o-transform: rotateY(90deg)
-
-  55%
-    background: rgb(221, 221, 221)
-
-  60%
-    background: rgb(200, 200, 200)
-
-  90%
-    -o-transform: rotateY(90deg)
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@-ms-keyframes s5ani
-  0%
-    opacity: 0
-    -ms-transform: rotateY(-179deg)
-
-  10%
-    opacity: 0
-    -ms-transform: rotateY(-179deg)
-
-  20%
-    opacity: 1
-    background: rgb(221, 221, 221)
-    -ms-transform: rotateY(0deg)
-
-  40%
-    -ms-transform: rotateY(0deg)
-
-  50%
-    -ms-transform: rotateY(90deg)
-
-  55%
-    background: rgb(221, 221, 221)
-
-  60%
-    background: rgb(200, 200, 200)
-
-  90%
-    -ms-transform: rotateY(90deg)
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@-webkit-keyframes s5ani
-  0%
-    opacity: 0
-    -webkit-transform: rotateY(-179deg)
-
-  10%
-    opacity: 0
-    -webkit-transform: rotateY(-179deg)
-
-  20%
-    opacity: 1
-    background: rgb(221, 221, 221)
-    -webkit-transform: rotateY(0deg)
-
-  40%
-    -webkit-transform: rotateY(0deg)
-
-  50%
-    -webkit-transform: rotateY(90deg)
-
-  55%
-    background: rgb(221, 221, 221)
-
-  60%
-    background: rgb(200, 200, 200)
-
-  90%
-    -webkit-transform: rotateY(90deg)
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@-moz-keyframes s5ani
-  0%
-    opacity: 0
-    -moz-transform: rotateY(-179deg)
-
-  10%
-    opacity: 0
-    -moz-transform: rotateY(-179deg)
-
-  20%
-    opacity: 1
-    background: rgb(221, 221, 221)
-    -moz-transform: rotateY(0deg)
-
-  40%
-    -moz-transform: rotateY(0deg)
-
-  50%
-    -moz-transform: rotateY(90deg)
-
-  55%
-    background: rgb(221, 221, 221)
-
-  60%
-    background: rgb(200, 200, 200)
-
-  90%
-    -moz-transform: rotateY(90deg)
-    opacity: 1
-
-  100%
-    opacity: 0
-
-
-@keyframes s6ani
-  0%
-    opacity: 0
-    transform: rotateY(179deg)
-
-  20%
-    opacity: 0
-    transform: rotateY(179deg)
-
-  30%
-    opacity: 1
-    transform: rotateY(0deg)
-
-  40%
-    transform: rotateY(0deg)
-
-  50%
-    transform: rotateY(-90deg)
-    background: #dddddd
-
-  60%
-    background: #c8c8c8
-
-  80%
-    background: #c8c8c8
-
-  90%
-    opacity: 1
-    transform: rotateY(-90deg)
-
-  100%
-    opacity: 0
-
-
-@-o-keyframes s6ani
-  0%
-    opacity: 0
-    -o-transform: rotateY(179deg)
-
-  20%
-    opacity: 0
-    -o-transform: rotateY(179deg)
-
-  30%
-    opacity: 1
-    -o-transform: rotateY(0deg)
-
-  40%
-    -o-transform: rotateY(0deg)
-
-  50%
-    -o-transform: rotateY(-90deg)
-    background: #dddddd
-
-  60%
-    background: #c8c8c8
-
-  80%
-    background: #c8c8c8
-
-  90%
-    opacity: 1
-    -o-transform: rotateY(-90deg)
-
-  100%
-    opacity: 0
-
-
-@-ms-keyframes s6ani
-  0%
-    opacity: 0
-    -ms-transform: rotateY(179deg)
-
-  20%
-    opacity: 0
-    -ms-transform: rotateY(179deg)
-
-  30%
-    opacity: 1
-    -ms-transform: rotateY(0deg)
-
-  40%
-    -ms-transform: rotateY(0deg)
-
-  50%
-    -ms-transform: rotateY(-90deg)
-    background: #dddddd
-
-  60%
-    background: #c8c8c8
-
-  80%
-    background: #c8c8c8
-
-  90%
-    opacity: 1
-    -ms-transform: rotateY(-90deg)
-
-  100%
-    opacity: 0
-
-
-@-webkit-keyframes s6ani
-  0%
-    opacity: 0
-    -webkit-transform: rotateY(179deg)
-
-  20%
-    opacity: 0
-    -webkit-transform: rotateY(179deg)
-
-  30%
-    opacity: 1
-    -webkit-transform: rotateY(0deg)
-
-  40%
-    -webkit-transform: rotateY(0deg)
-
-  50%
-    -webkit-transform: rotateY(-90deg)
-    background: #dddddd
-
-  60%
-    background: #c8c8c8
-
-  80%
-    background: #c8c8c8
-
-  90%
-    opacity: 1
-    -webkit-transform: rotateY(-90deg)
-
-  100%
-    opacity: 0
-
-
-@-moz-keyframes s6ani
-  0%
-    opacity: 0
-    -moz-transform: rotateY(179deg)
-
-  20%
-    opacity: 0
-    -moz-transform: rotateY(179deg)
-
-  30%
-    opacity: 1
-    -moz-transform: rotateY(0deg)
-
-  40%
-    -moz-transform: rotateY(0deg)
-
-  50%
-    -moz-transform: rotateY(-90deg)
-    background: #dddddd
-
-  60%
-    background: #c8c8c8
-
-  80%
-    background: #c8c8c8
-
-  90%
-    opacity: 1
-    -moz-transform: rotateY(-90deg)
-
-  100%
-    opacity: 0
-
-
-@keyframes half-fold
-  0%
-    transform: rotateX(0deg)
-
-  50%
-    transform: rotateX(0deg)
-
-  60%
-    transform: rotateX(-90deg)
-
-  90%
-    transform: rotateX(-90deg)
-
-
-@-o-keyframes half-fold
-  0%
-    -o-transform: rotateX(0deg)
-
-  50%
-    -o-transform: rotateX(0deg)
-
-  60%
-    -o-transform: rotateX(-90deg)
-
-  90%
-    -o-transform: rotateX(-90deg)
-
-
-@-ms-keyframes half-fold
-  0%
-    -ms-transform: rotateX(0deg)
-
-  50%
-    -ms-transform: rotateX(0deg)
-
-  60%
-    -ms-transform: rotateX(-90deg)
-
-  90%
-    -ms-transform: rotateX(-90deg)
-
-
-@-webkit-keyframes half-fold
-  0%
-    -webkit-transform: rotateX(0deg)
-
-  50%
-    -webkit-transform: rotateX(0deg)
-
-  60%
-    -webkit-transform: rotateX(-90deg)
-
-  90%
-    -webkit-transform: rotateX(-90deg)
-
-
-@-moz-keyframes half-fold
-  0%
-    -moz-transform: rotateX(0deg)
-
-  50%
-    -moz-transform: rotateX(0deg)
-
-  60%
-    -moz-transform: rotateX(-90deg)
-
-  90%
-    -moz-transform: rotateX(-90deg)

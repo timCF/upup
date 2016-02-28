@@ -125,16 +125,11 @@ mixin item(el)
 					button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_item(el.id)) удалить
 mixin preloader()
 	div.preloader
-		div.cssload-container
-			div.cssload-cube
-				div.cssload-half1
-					div.cssload-side.cssload-s1
-					div.cssload-side.cssload-s2
-					div.cssload-side.cssload-s5
-				div.cssload-half2
-					div.cssload-side.cssload-s3
-					div.cssload-side.cssload-s4
-					div.cssload-side.cssload-s6
+		div.cssload-circle
+		div.cssload-circle
+		div.cssload-circle
+		div.cssload-circle
+		div.cssload-circle
 //
 //	page content
 //
