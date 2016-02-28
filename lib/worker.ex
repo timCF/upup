@@ -52,12 +52,12 @@ defmodule Upup.Worker do
 						:ok ->
 							Upup.Storage.update_album(album, "ok")
 						{:error, error} ->
-							message = "ERROR ON UPLOAD USER PHOTOS #{error}, acc #{inspect account}"
+							message = "ERROR ON UPLOAD USER PHOTOS #{error}"
 							Upup.error(message)
 							Upup.Storage.update_album(album, message)
 					end
 			{:error, error} ->
-				message = "ERROR ON CLENUP USER PHOTOS #{error}, acc #{inspect account}"
+				message = "ERROR ON CLENUP USER PHOTOS #{error}"
 				Upup.error(message)
 				Upup.Storage.update_album(album, message)
 		end
