@@ -61,7 +61,7 @@ mixin make_main_block(blo, visibility)
 					h3.center
 						| Кстати, это open-source проект, исходники лежат 
 						a(href="https://github.com/timCF/upup", target="_blank") здесь
-						| . А самую свежую сборку под linux ( 64 bit Intel ) можно скачать 
+						| . А самую свежую сборку под linux ( 64-bit x86 ) можно скачать 
 						a(href="https://yadi.sk/d/wunDCfMjo5SmK", target="_blank") здесь
 						| .
 						
@@ -159,6 +159,9 @@ if locals.data.is_logined == false
 			+preloader()
 		else
 			div.container-fluid.padded.overlay_input
+				div.row.padded_top
+					div.col-md-offset-4.col-md-4.padded_left
+						iframe.fill(src="https://player.vimeo.com/video/157057490" width="500" height="280" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen)
 				div.row.padded_top
 					div.col-md-offset-4.col-md-4.padded_left
 						input.form-control.fill(type="password" autocomplete="on" placeholder=(locals.opts.token ? "•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••" : "ключ") onChange=locals.handlers.change_from_view(["opts","token"]))
