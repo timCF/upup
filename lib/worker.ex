@@ -104,7 +104,7 @@ defmodule Upup.Worker do
 	end
 
 	def tmp_save(%Upup.Item{link: link}) do
-		case HTTPoison.get(link, [], [hackney: [recv_timeout: 15000, connect_timeout: 15000]]) do
+		case HTTPoison.get(link, [], [hackney: [recv_timeout: 60000, connect_timeout: 60000]]) do
 			{:ok, %HTTPoison.Response{status_code: 200, body: bin}} when is_binary(bin) ->
 				filename = Exutils.priv_dir(:upup)<>"/tmp/"<>Exutils.make_uuid<>"."<>(String.split(link,".") |> List.last)
 				File.write!(filename, bin)
