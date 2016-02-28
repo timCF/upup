@@ -3,6 +3,7 @@ defmodule Upup.Myswt do
 		{"@imgregexp", ~r/^http(s)?\:\/\/(cs|pp)\d*\.vk\.me/},
 		{"@proxy_whitelist_ttl", :timer.minutes(5)}
 	]
+	require Exutils
 	require Myswt
 	Myswt.callback_module do
 		#
@@ -10,7 +11,9 @@ defmodule Upup.Myswt do
 		#
 		def handle_myswt(%Myswt.Proto{subject: "get_account_data", content: %{token: token, country: country}}) when is_binary(token) and is_binary(country) do
 			case get_connection_details(token, country) do
-				error = %Myswt.Proto{} -> error
+				%Myswt.Proto{} ->
+					# IGNORE
+					%Myswt.Proto{subject: "pong", content: ""}
 				%{first_name: first_name, uid: uid, proxy: _} ->
 					tasks = Upup.Storage.get_tasks(uid)
 					%Myswt.Proto{
@@ -181,10 +184,10 @@ defmodule Upup.Myswt do
 		case Upup.getproxy(country) do
 			nil -> %Myswt.Proto{content: "cannot get proxy for country #{country}"}
 			proxy ->
-				case Exvk.Auth.get_permissions(token, proxy) do
+				case Exvk.Auth.get_permissions(token, proxy) |> Exutils.safe do
 					2079998 ->
 						Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @proxy_whitelist_ttl)
-						case Exvk.Auth.get_my_name(token, proxy) do
+						case Exvk.Auth.get_my_name(token, proxy) |> Exutils.safe do
 							{:error, error} -> %Myswt.Proto{content: "cannot get account details for token, error #{inspect error}"}
 							%{first_name: name, uid: uid} ->
 								:ok = Upup.Storage.save_account(%{uid: uid, country: country, token: token})

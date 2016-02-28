@@ -36,7 +36,7 @@ exports.config =
 
     less:
       dumpLineNumbers: 'comments'
-      
+
     bower:
       extend:
         #"bootstrap" : 'vendor/bootstrap/docs/assets/js/bootstrap.js'
@@ -45,4 +45,3 @@ exports.config =
       asserts:
         "img" : /bootstrap(\\|\/)img/
         "font": /font-awesome(\\|\/)font/
-

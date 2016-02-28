@@ -47,6 +47,24 @@ mixin make_main_block(blo, visibility)
 		else if blo.val == "about"
 			div.row
 				div.col-md-12
+					h3
+						| Привет пользователь! Upup это сервис для автоматизации загрузки 
+						| изображений в социальную сеть 
+						a(href="https://vk.com", target="_blank") vk.com
+						| . 
+						| Всё что он делает - загружает определённые изображения 
+						| с заданным описанием в определённые альбомы соц сети 
+						| следуя заданным правилам. В принципе если ты добрался 
+						| до этой страницы, то значит уже более-менее знаешь как работать с 
+						| этим сервисом из вступительного видеоролика, это просто - так 
+						| что писать что-то дополнительно не вижу смысла. 
+					h3.center
+						| Кстати, это open-source проект, исходники лежат 
+						a(href="https://github.com/timCF/upup", target="_blank") здесь
+						| . А самую свежую сборку под linux ( 64 bit Intel ) можно скачать 
+						a(href="https://yadi.sk/d/wunDCfMjo5SmK", target="_blank") здесь
+						| .
+						
 mixin new_album(task_id)
 	div.row
 		div.col-md-3
@@ -105,6 +123,18 @@ mixin item(el)
 					button.btn.btn-warning.fill(type="button" onClick=locals.handlers.save_item(locals.data.editable.items[key], el.id)) сохранить
 				div.col-md-6
 					button.btn.btn-danger.fill(type="button" onClick=locals.handlers.delete_item(el.id)) удалить
+mixin preloader()
+	div.preloader
+		div.cssload-container
+			div.cssload-cube
+				div.cssload-half1
+					div.cssload-side.cssload-s1
+					div.cssload-side.cssload-s2
+					div.cssload-side.cssload-s5
+				div.cssload-half2
+					div.cssload-side.cssload-s3
+					div.cssload-side.cssload-s4
+					div.cssload-side.cssload-s6
 //
 //	page content
 //
@@ -130,24 +160,25 @@ each blo in locals.opts.blocks
 		+make_main_block(blo, "hidden")
 if locals.data.is_logined == false
 	div.overlay
-		div.container-fluid.padded.overlay_input
-			div.row.padded_top
-				div.col-md-offset-4.col-md-4.padded_left
-					input.form-control.fill(type="password" autocomplete="on" placeholder=(locals.opts.token ? "•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••" : "ключ") onChange=locals.handlers.change_from_view(["opts","token"]))
-			div.row.padded_top
-				div.col-md-offset-4.col-md-2.padded_left
-					select.form-control.fill(onChange=locals.handlers.change_from_view(["opts","country"]))
-						each el in ["RU","UA"]
-							option= el
-				div.col-md-2.padded_left
-					a.fill(href="https://oauth.vk.com/authorize?client_id=4053347&scope=notify,friends,photos,audio,video,docs,notes,pages,status,offers,questions,wall,groups,messages,notifications,stats,ads,offline&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token", target="_blank")
-						button.btn.btn-success.fill(type="button") получить ключ
-			div.row.padded_top
-				div.col-md-offset-4.col-md-4.padded_left
-					button.btn.btn-primary.fill(type="button" onClick=locals.handlers.log_in()) войти
+		if locals.data.is_entering
+			+preloader()
+		else
+			div.container-fluid.padded.overlay_input
+				div.row.padded_top
+					div.col-md-offset-4.col-md-4.padded_left
+						input.form-control.fill(type="password" autocomplete="on" placeholder=(locals.opts.token ? "•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••" : "ключ") onChange=locals.handlers.change_from_view(["opts","token"]))
+				div.row.padded_top
+					div.col-md-offset-4.col-md-2.padded_left
+						select.form-control.fill(onChange=locals.handlers.change_from_view(["opts","country"]))
+							each el in ["RU","UA"]
+								option= el
+					div.col-md-2.padded_left
+						a.fill(href="https://oauth.vk.com/authorize?client_id=4053347&scope=notify,friends,photos,audio,video,docs,notes,pages,status,offers,questions,wall,groups,messages,notifications,stats,ads,offline&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token", target="_blank")
+							button.btn.btn-success.fill(type="button") получить ключ
+				div.row.padded_top
+					div.col-md-offset-4.col-md-4.padded_left
+						button.btn.btn-primary.fill(type="button" onClick=locals.handlers.log_in()) войти
 if locals.data.is_locked
 	div.overlay
-		div.container-fluid.padded.overlay_input
-			div.row.padded_top.center
-				div.col-md-12.center
-					div.btn.btn-default.navbar-btn.disabled.center= "команда выполняется"
+		+preloader()
+					

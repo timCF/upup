@@ -4,6 +4,7 @@ defmodule Upup.Worker do
 		{"@proxy_whitelist_ttl", :timer.minutes(5)}
 	]
 	use GenServer
+	require Exutils
 
 	def start_link(args), do: GenServer.start_link(__MODULE__, args)
 
@@ -64,7 +65,7 @@ defmodule Upup.Worker do
 
 	defp cleanup_user_photos(album = %Upup.Album{gid: gid, aid: aid}, %Upup.Account{token: token, uid: uid}, proxy) do
 		fn() ->
-			case Exvk.Photos.get(%{gid: gid, aid: aid}, token, proxy) do
+			case Exvk.Photos.get(%{gid: gid, aid: aid}, token, proxy) |> Exutils.safe do
 				{:error, error} -> {:error, "error on getting photos #{inspect error}"}
 				lst when is_list(lst) ->
 					Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @proxy_whitelist_ttl)
@@ -73,7 +74,7 @@ defmodule Upup.Worker do
 							fn(%{pid: pid}) -> pid end) |> Enum.uniq do
 						[] -> :ok
 						pids = [_|_] ->
-							case Stream.map(pids, &(Exvk.Photos.delete(%{gid: gid, pid: &1}, token, proxy))) |> Enum.filter(&(&1 != :ok)) do
+							case Stream.map(pids, &(Exvk.Photos.delete(%{gid: gid, pid: &1}, token, proxy) |> Exutils.safe)) |> Enum.filter(&(&1 != :ok)) do
 								[] -> :ok
 								errors = [_|_] -> {:error, "error on deleting pids from album #{inspect album} => #{inspect errors}"}
 							end
@@ -88,7 +89,7 @@ defmodule Upup.Worker do
 			case tmp_save(item) do
 				error = {:error, _} -> error
 				{:ok, filename} ->
-					case Exvk.Photos.upload(%{gid: gid, aid: aid, path: filename, caption: caption}, token, proxy) do
+					case Exvk.Photos.upload(%{gid: gid, aid: aid, path: filename, caption: caption}, token, proxy) |> Exutils.safe do
 						:ok ->
 							Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @proxy_whitelist_ttl)
 							File.rm!(filename)
@@ -103,7 +104,7 @@ defmodule Upup.Worker do
 	end
 
 	def tmp_save(%Upup.Item{link: link}) do
-		case HTTPoison.get(link) do
+		case HTTPoison.get(link, [], [hackney: [recv_timeout: 15000, connect_timeout: 15000]]) do
 			{:ok, %HTTPoison.Response{status_code: 200, body: bin}} when is_binary(bin) ->
 				filename = Exutils.priv_dir(:upup)<>"/tmp/"<>Exutils.make_uuid<>"."<>(String.split(link,".") |> List.last)
 				File.write!(filename, bin)

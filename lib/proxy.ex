@@ -3,6 +3,7 @@ defmodule Upup.Proxy do
 		{"@ttl", :timer.minutes(1)}
 	]
 	use ExActor.GenServer, export: true
+	require Exutils
 	definit do
 		{:ok, nil, 5000}
 	end
@@ -17,7 +18,7 @@ defmodule Upup.Proxy do
 						proxylst = [_|_] ->
 							Enum.each(proxylst, fn(proxy) ->
 								%Upup.Account{token: token} = Enum.random(accounts)
-								case Exvk.Auth.get_my_name(token, proxy) do
+								case Exvk.Auth.get_my_name(token, proxy) |> Exutils.safe do
 									%{first_name: _, uid: _} -> Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @ttl)
 									{:error, _} -> :ok
 								end

@@ -18,6 +18,7 @@ init_state =
 	data: {
 		is_logined: false,
 		is_locked: false,
+		is_entering: false,
 		userdata: false,
 		editable: {
 			tasks: {},
@@ -133,6 +134,7 @@ init_state =
 			actor.cast((state) ->
 				state.handlers.save_opts()
 				to_server("get_account_data", {token: state.opts.token, country: state.opts.country})
+				state.data.is_entering = true
 				state)
 	}
 #
@@ -193,9 +195,10 @@ document.addEventListener "DOMContentLoaded", (e) ->
 		mess = $.parseJSON(e.data)
 		subject = mess.subject
 		content = mess.content
-		if ((subject != "ping") and (subject != "get_account_data"))
+		if (subject != "pong")
 			actor.cast((state) ->
-				state.data.is_locked = false
+				if (subject != "get_account_data") then (state.data.is_locked = false)
+				state.data.is_entering = false
 				state)
 		switch subject
 			when "pong" then "ok"
