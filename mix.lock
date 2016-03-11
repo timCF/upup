@@ -37,7 +37,7 @@
   "silverb": {:git, "https://github.com/timCF/silverb.git", "7a093e67590c4b38240a864ef8ef33ff82db3ad1", []},
   "sqlx": {:git, "https://github.com/timCF/sqlx.git", "a3240098b5ce297c189d98fd3ba40e75ac480c5a", []},
   "ssl_verify_hostname": {:hex, :ssl_verify_hostname, "1.0.5"},
-  "tinca": {:git, "https://github.com/timCF/tinca.git", "06ee9bff138dbdeae6c1de0340b10475f4b657b1", []},
+  "tinca": {:git, "https://github.com/timCF/tinca.git", "5fcfa011477d7f14d8bc44f5dbd385f33c672818", []},
   "uuid": {:git, "https://github.com/okeuday/uuid.git", "80cd98fe28c2865711bde99d5a6e245434b1698b", []},
   "wwwest_lite": {:git, "https://github.com/timCF/wwwest_lite.git", "e56d8441ec4c3d0905c8a919d4570523ef94ba47", []},
   "xmlex": {:git, "https://github.com/timCF/xmlex.git", "e4f02ad350f97dca89a471b05eb7554b192a5f4c", []}}

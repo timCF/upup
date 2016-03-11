@@ -18,7 +18,7 @@ defmodule Upup.Proxy do
 						proxylst = [_|_] ->
 							Enum.each(proxylst, fn(proxy) ->
 								%Upup.Account{token: token} = Enum.random(accounts)
-								case Exvk.Auth.get_my_name(token, proxy) |> Exutils.safe do
+								case Upup.get_my_name(token, proxy) |> Exutils.safe do
 									%{first_name: _, uid: _} -> Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @ttl)
 									{:error, _} -> :ok
 								end

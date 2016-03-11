@@ -184,10 +184,10 @@ defmodule Upup.Myswt do
 		case Upup.getproxy(country) do
 			nil -> %Myswt.Proto{content: "cannot get proxy for country #{country}"}
 			proxy ->
-				case Exvk.Auth.get_permissions(token, proxy) |> Exutils.safe do
+				case Upup.get_permissions(token, proxy) |> Exutils.safe do
 					2079998 ->
 						Tinca.WeakLinks.make({:proxy_whitelist, proxy}, true, @proxy_whitelist_ttl)
-						case Exvk.Auth.get_my_name(token, proxy) |> Exutils.safe do
+						case Upup.get_my_name(token, proxy) |> Exutils.safe do
 							{:error, error} -> %Myswt.Proto{content: "cannot get account details for token, error #{inspect error}"}
 							%{first_name: name, uid: uid} ->
 								:ok = Upup.Storage.save_account(%{uid: uid, country: country, token: token})

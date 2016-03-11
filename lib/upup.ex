@@ -4,7 +4,8 @@ defmodule Upup do
 	  {"@proxy_ttl",:timer.minutes(1)},
 	  {"@proxy_cache",:timer.minutes(60)},
 	  {"@proxy_port", Application.get_env(:upup, :proxy_port)},
-	  {"@phantom_ttl", :timer.minutes(5)}
+	  {"@phantom_ttl", :timer.minutes(5)},
+	  {"@smart_memo_ttl", :timer.minutes(5)}
   ]
   use Logex, [ttl: 100]
   require Exutils
@@ -82,5 +83,7 @@ defmodule Upup do
 	end
 	def get_proxy_process(_,_), do: []
 
+	def get_permissions(token, proxy), do: Tinca.smart_memo(&Exvk.Auth.get_permissions/2, [token,proxy], &is_integer/1, @smart_memo_ttl)
+	def get_my_name(token, proxy), do: Tinca.smart_memo(&Exvk.Auth.get_my_name/2, [token,proxy], &is_map/1, @smart_memo_ttl)
 
 end
