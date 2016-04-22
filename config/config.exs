@@ -21,11 +21,9 @@ use Mix.Config
 #     config :logger, level: :info
 #
 
-config :upup,
-	proxy_port: "80"
-
 config :exvk,
-	http_timeout: 60000
+	http_timeout: 5000,
+	http_upload: 60000
 
 config :myswt,
 	app: :upup,

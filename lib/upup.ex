@@ -3,7 +3,6 @@ defmodule Upup do
   use Silverb, [
 	  {"@proxy_ttl",:timer.minutes(1)},
 	  {"@proxy_cache",:timer.minutes(60)},
-	  {"@proxy_port", Application.get_env(:upup, :proxy_port)},
 	  {"@phantom_ttl", :timer.minutes(5)},
 	  {"@smart_memo_ttl", :timer.minutes(5)}
   ]
